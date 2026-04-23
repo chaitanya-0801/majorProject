@@ -1,0 +1,237 @@
+/* Global Reset */
+* {
+  box-sizing: border-box;
+}
+
+.login-main {
+  display: flex;
+  overflow-y: auto;
+  min-height: 100vh;
+}
+
+/* Left Section */
+.login-left {
+  flex-grow: 1;
+  margin-top: 60px;
+  margin-left: 20px;
+  height: 80vh;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-left img {
+  width: 400px;
+  max-width: 100%;
+}
+
+/* Right Section */
+.login-right {
+  flex-grow: 1;
+  height: 100vh;
+}
+
+.login-right-container {
+  height: 80%;
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Logo */
+.login-logo {
+  align-self: center;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.login-logo img {
+  width: 50px;
+}
+
+/* Center Content */
+.login-center {
+  margin: auto 0;
+  text-align: center;
+}
+
+.login-center h2 {
+  font-size: 35px;
+}
+
+.login-center p {
+  font-weight: 400;
+  font-size: 20px;
+  margin-bottom: 40px;
+}
+
+/* Form Inputs */
+.login-right form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: none;
+  border-bottom: 1px solid #222831;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+form input:focus {
+  border-bottom-color: #000;
+  outline: 2px solid #222831;
+  outline-offset: 2px;
+}
+
+/* Password Visibility Toggle */
+.pass-input-div {
+  position: relative;
+}
+
+.pass-input-div button,
+.see,
+.hide {
+  font-size: 15px;
+  position: absolute;
+  top: 15px;
+  right: 5px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+}
+
+/* Submit Button */
+form button[type="submit"] {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Options (Remember me / Forgot password) */
+.login-center-options {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.remember-div {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.remember-div label {
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.forgot-pass-link {
+  text-decoration: none;
+  font-size: 13px;
+}
+
+.forgot-pass-link:hover {
+  text-decoration: underline;
+}
+
+/* Buttons Below Form */
+.login-center-buttons {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 10px;
+}
+
+.login-center-buttons button:nth-child(1) {
+  background: #222831;
+  color: white;
+  border: 3px solid #222831;
+  transition: background 0.3s, color 0.3s;
+}
+
+.login-center-buttons button:nth-child(1):hover {
+  color: #333;
+  background-color: white;
+}
+
+.login-center-buttons button:nth-child(2) {
+  background: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+  transition: background 0.3s;
+}
+
+.login-center-buttons button:nth-child(2) img {
+  width: 30px;
+}
+
+.login-center-buttons button:nth-child(2):hover {
+  background: #c4c4c4c2;
+}
+
+/* Bottom Paragraph */
+.login-bottom-p {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 20px;
+}
+
+.login-bottom-p a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-bottom-p a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .login-main {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .login-left,
+  .login-right {
+    width: 100%;
+    margin: 0;
+    height: auto;
+  }
+
+  .login-left img {
+    width: 80%;
+    margin-top: 20px;
+  }
+
+  .login-right-container {
+    width: 90%;
+    padding: 20px 0;
+  }
+
+  .login-center h2 {
+    font-size: 28px;
+  }
+
+  .login-center p {
+    font-size: 16px;
+  }
+}
+ 

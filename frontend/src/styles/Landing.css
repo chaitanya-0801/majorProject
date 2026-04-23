@@ -1,0 +1,69 @@
+/* Landing Page Main Container */
+.landing-main {
+  font-size: 30px;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Shared Button Styles */
+.landing-login-button,
+.landing-register-button {
+  background-color: black;
+  color: white;
+  border: 3px solid black;
+  border-radius: 30px;
+  padding: 16px;
+  width: 100%;
+  max-width: 500px;
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background 0.3s ease, color 0.3s ease;
+  text-align: center;
+}
+
+/* Hover Effect for Both Buttons */
+.landing-login-button:hover,
+.landing-register-button:hover {
+  background-color: white;
+  color: #333;
+}
+
+/* Responsive Styling */
+@media (max-width: 600px) {
+  .landing-main {
+    font-size: 24px;
+    padding: 10px;
+  }
+
+  .landing-login-button,
+  .landing-register-button {
+    font-size: 18px;
+    padding: 14px;
+    max-width: 90%;
+  }
+}
+/* Animated Logo */
+.landing-logo {
+  width: 150px;
+  margin-bottom: 20px;
+  animation: floatLogo 3s ease-in-out infinite;
+}
+
+/* Floating animation keyframes */
+@keyframes floatLogo {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
