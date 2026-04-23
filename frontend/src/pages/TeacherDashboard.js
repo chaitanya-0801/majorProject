@@ -64,7 +64,7 @@ const TeacherDashboard = () => {
       <div className="row1">
         <div className="heading">
           <h2>Your Sessions</h2>
-        </div>
+        </div>  
         <div className="createbtncol">
           <button onClick={togglePopup} className="createbtn">
             Create Session
