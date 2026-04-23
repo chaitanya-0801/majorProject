@@ -1,99 +1,144 @@
-@keyframes fadeIn {
+/* Popup container */
+.new-popup {
+  width: 100%;
+  max-width: 500px;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0px 10px 30px rgba(0,0,0,0.15);
+  animation: popupFade 0.3s ease;
+}
+
+/* Animation */
+@keyframes popupFade {
   from {
-    background-color: rgba(0, 0, 0, 0);
+    opacity: 0;
+    transform: scale(0.9);
   }
   to {
-    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 1;
+    transform: scale(1);
   }
 }
 
-.new-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: #121212;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.6);
-  animation: fadeIn 0.3s ease-out;
-  z-index: 1000;
-  width: 400px;
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: #e74c3c;
   color: white;
-  
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+  transition: 0.3s ease;
 }
 
-.new-popup h5 {
+.close-btn:hover {
+  background: #c0392b;
+}
+
+/* Form section */
+.popup-inner h5 {
   text-align: center;
-  font-size: 20px;
-  margin-bottom: 20px;
-  
+  font-size: 24px;
+  color: #222831;
+  margin-bottom: 25px;
 }
 
-.popup-inner {
+.popup-inner form {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
 }
 
-.popup-inner input,
-.popup-inner select,
-.popup-inner button {
-  width: 100%;
-  padding: 10px;
-  border-radius: 6px;
-  border: none;
-  font-size: 14px;
-  
-}
-
+/* Inputs */
 .popup-inner input,
 .popup-inner select {
-  background-color: #1e1e1e;
-  color: white;
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s ease;
 }
 
-.popup-inner button {
-  background-color: #00c853;
+.popup-inner input:focus,
+.popup-inner select:focus {
+  border-color: #4a90e2;
+  box-shadow: 0px 0px 5px rgba(74,144,226,0.3);
+}
+
+/* Create button */
+.popup-inner button[type="submit"] {
+  background: #4a90e2;
   color: white;
-  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 15px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: auto;
-    
+  transition: 0.3s ease;
 }
 
-.popup-inner button:hover {
-  background-color: #00b140;
+.popup-inner button[type="submit"]:hover {
+  background: #357abd;
 }
 
+/* QR section */
 .qr-code-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
-  color: white;
 }
 
 .qr-image {
-  border: 4px solid #ffffff;
-  border-radius: 10px;
+  margin-bottom: 20px;
   padding: 10px;
-  margin-bottom: 15px;
-  background-color: white;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0px 5px 20px rgba(0,0,0,0.08);
 }
 
+/* QR text */
 .qr-text {
-  font-size: 12px;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 20px;
   word-break: break-all;
-  margin-bottom: 10px;
-  
 }
 
-.close-btn {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  background: transparent;
-  border: none;
+/* Copy button */
+.qr-code-container button {
+  background: #2ecc71;
   color: white;
-  font-size: 16px;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
   cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.qr-code-container button:hover {
+  background: #27ae60;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .new-popup {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .popup-inner h5 {
+    font-size: 20px;
+  }
 }

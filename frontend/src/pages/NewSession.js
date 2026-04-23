@@ -50,6 +50,7 @@ const NewSession = ({ togglePopup }) => {
 
           try {
             const res = await axios.post("/sessions/create", formData);
+            console.log(res)
             setQrData(res.data.url);
             setQrtoggle(true);
           } catch (err) {

@@ -1,105 +1,128 @@
-@keyframes fadeIn {
-  from {
-    background-color: rgba(0, 0, 0, 0); /* Fully transparent */
-  }
-  to {
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent */
-  }
-}
-
-.popup {
+/* Overlay */
+.session-popup {
   position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 1000px;
-  transform: translate(-50%, -50%);
-  background-color: black;
-  padding: 20px;
-  border-radius: 5px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-}
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.65);
 
-.popup-content {
   display: flex;
+  justify-content: center;
   align-items: center;
-  margin-left: 10px;
+  z-index: 1000;
 }
 
-.popup-inner {
-  align-items: center;
-}
-
-.session-details {
-  flex: 1; /* Take remaining space */
-  margin-right: 20px;
-}
-
-.session-details p {
-  margin-bottom: 10px;
-  color: white;
-}
-
-.session-details button {
-  margin-top: 10px;
-}
-
-.qr-code {
-  width: 200px;
-  padding: 20px;
-}
-
-.QRCode {
-  width: 200px;
-  height: 200px;
-  border: 2px solid #000;
-  border-radius: 10px;
-}
-
-.scrollable-content {
-  max-height: 300px; /* Adjust this value as needed */
+/* Modal */
+.session-modal {
+  width: 90%;
+  max-width: 1100px;
+  max-height: 90vh;
   overflow-y: auto;
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  position: relative;
 }
 
-table {
+/* Close button */
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: none;
+  background: #e74c3c;
+  color: white;
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* Top section */
+.session-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+/* Cards */
+.session-info-card,
+.qr-card {
+  flex: 1;
+  background: #f8fbff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0px 4px 12px rgba(0,0,0,0.08);
+}
+
+.session-info-card h2,
+.qr-card h2,
+.attendance-section h2 {
+  margin-bottom: 20px;
+}
+
+/* QR button */
+.copy-btn {
+  margin-top: 20px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Attendance section */
+.attendance-section {
+  margin-top: 20px;
+}
+
+/* Table */
+.attendance-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 20px;
-  background-color: aliceblue;
-  border-radius: 5px;
 }
 
-th {
-  background-color: #222831;
+.attendance-table th {
+  background: #4a90e2;
   color: white;
-  font-size: medium;
+  padding: 12px;
 }
 
-th,
-td {
-  padding: 10px;
-  border: 1px solid black;
-  font-size: small;
+.attendance-table td {
+  padding: 12px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
 }
 
-.copybtn {
-  padding: 6px 12px;
-  margin-left: 38%;
-  background-color: #222831;
-  color: white;
-  border: none;
-  border-radius: 4px;
+.attendance-table tr:hover {
+  background: #f5f9ff;
+}
+
+/* Student image */
+.student-image {
+  width: 70px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 10px;
   cursor: pointer;
 }
 
-button {
-  padding: 6px 12px;
-  background-color: #222831;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+/* Responsive */
+@media (max-width: 768px) {
+  .session-top {
+    flex-direction: column;
+  }
 
-.copybtn:hover {
-  background-color: #31363f;
+  .session-modal {
+    width: 95%;
+    padding: 20px;
+  }
+
+  .attendance-table {
+    display: block;
+    overflow-x: auto;
+  }
 }

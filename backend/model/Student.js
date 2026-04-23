@@ -8,6 +8,7 @@ const userSchema = new schema(
     pno: { type: String, required: true },
     dob: { type: String, required: true },
     password: { type: String, required: true },
+    identityNumber:{type:Number,required:true},
     sessions: [
       {
         session_id: { type: String, required: true },

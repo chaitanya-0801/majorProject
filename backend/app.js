@@ -14,13 +14,10 @@ const PORT = process.env.PORT || 5050;
 const MONGODB_URL = process.env.DB_URI;
 const CLIENT_URL='http://localhost:3000'
 // Middleware
-app.use(
-  cors({
-    origin: CLIENT_URL,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    credentials: true,
-  })
-);
+app.use(cors({
+  origin: true,
+  credentials: true
+}));
 app.use(cookieParser());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.static("public"));

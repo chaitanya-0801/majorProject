@@ -1,41 +1,116 @@
-/* Nav.css */
-
+/* Navbar container */
 .nav-container {
-  background-color: #333;
-  color: #fff;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
-.nav-links {
+/* Main navbar */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffffff;
+  padding: 12px 40px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid #eee;
+}
+
+/* Left section */
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
   text-decoration: none;
-  color: #333;
+  gap: 10px;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+}
+
+.logo-text {
+  font-size: 22px;
   font-weight: bold;
-  transition: color 0.3s ease;
+  color: #222831;
 }
 
-.navbar-link:hover {
-  color: #007bff;
+/* Center section */
+.nav-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
-a {
+/* Right section */
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Logout button */
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   text-decoration: none;
+  background: #e74c3c;
   color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  transition: 0.3s ease;
+  font-weight: 500;
 }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  border-bottom: 1px solid #ddd;
-}
-nav ul {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-}
-nav li {
-  list-style-type: none;
-  margin-right: 20px;
+.logout-btn img {
+  width: 20px;
+  height: 20px;
 }
 
-h5 {
-  margin: 0;
+.logout-btn:hover {
+  background: #c0392b;
+  transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .nav-center {
+    justify-content: center;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  .logout-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+.signup-btn {
+  text-decoration: none;
+  background: #4a90e2;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.signup-btn:hover {
+  background: #357abd;
+  transform: translateY(-2px);
 }

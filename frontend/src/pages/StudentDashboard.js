@@ -81,7 +81,7 @@ const Dashboard = () => {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Date</th>
+                {/* <th>Date</th> */}
                 <th>Time</th>
                 <th>Duration</th>
                 <th>Distance</th>
@@ -98,7 +98,7 @@ const Dashboard = () => {
                   return (
                     <tr key={index} className="session">
                       <td>{session?.name || "N/A"}</td>
-                      <td>{session?.date?.split("T")[0] || "N/A"}</td>
+                      {/* <td>{session?.date?.split("T")[0] || "N/A"}</td> */}
                       <td>{session?.time || "N/A"}</td>
                       <td>{session?.duration || "N/A"}</td>
                       <td className="distance" style={{ color }}>

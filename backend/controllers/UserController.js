@@ -58,7 +58,7 @@ const token = jwt.sign(
   }
 }// Create a new user
 async function Signup(req, res) {
-  const { name, email, pno, dob, password, type } = req.body;
+  const { name, email, pno, dob, password, type,identityNumber } = req.body;
   if (type === "student") {
     const user = new Student({
       name: name,
@@ -66,6 +66,7 @@ async function Signup(req, res) {
       pno: pno,
       dob: dob,
       password: password,
+      identityNumber:identityNumber,
     });
     try {
       const existingUser = await Student.findOne({ email: email }).exec();
@@ -85,6 +86,7 @@ async function Signup(req, res) {
       pno: pno,
       dob: dob,
       password: password,
+      identityNumber:identityNumber,
     });
     try {
       const existingUser = await Teacher.findOne({ email: email }).exec();

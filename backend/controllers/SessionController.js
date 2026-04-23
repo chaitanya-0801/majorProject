@@ -4,6 +4,7 @@ import querystring from "querystring";
 import { Teacher } from "../model/Teacher.js";
 import { Student } from "../model/Student.js";
 import uploadImage from "../middleware/cloudinary.js";
+import jwt from 'jsonwebtoken'
 
 function getQR(session_id, email) {
   let url = `${process.env.CLIENT_URL}/login?${querystring.stringify({
@@ -47,6 +48,7 @@ function checkStudentDistance(Location1, Location2) {
 //make controller functions
 
 async function CreateNewSession(req, res) {
+  console.log("Ram Ram")
   let { session_id, name, duration, location, radius, date, time, token } =
     req.body;
   let tokenData = req.user;
@@ -60,7 +62,7 @@ async function CreateNewSession(req, res) {
     location,
     radius,
   };
-
+  
   try {
     let teacher = await Teacher.findOneAndUpdate(
       { email: tokenData.email },
@@ -72,7 +74,8 @@ async function CreateNewSession(req, res) {
       message: "Session created successfully",
     });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.log("kuch ")
+    res.status(400).json({ message: "kya hal hao" });
   }
 }
 //get sessions
@@ -95,6 +98,79 @@ async function GetQR(req, res) {
     res.status(400).json({ message: err.message });
   }
 }
+
+
+async function deleteSession (req, res) {
+  try {
+    const { token, session_id } = req.body;
+
+    console.log("Incoming req body:", req.body);
+
+    if (!token || !session_id) {
+      return res.status(400).json({
+        message: "Token and session_id are required",
+      });
+    }
+
+    // Verify token
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    const email = decoded.email;
+
+    console.log("Teacher email:", email);
+
+    // Find teacher
+    const teacher = await Teacher.findOne({ email });
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    console.log("Before delete:", teacher.sessions.length);
+
+    // Find session first
+    const sessionExists = teacher.sessions.find(
+      (session) =>
+        session.session_id === session_id
+    );
+
+    if (!sessionExists) {
+      return res.status(404).json({
+        message: "Session not found",
+      });
+    }
+
+    // Remove session
+    teacher.sessions = teacher.sessions.filter(
+      (session) =>
+        session.session_id !== session_id
+    );
+
+    await teacher.save();
+
+    console.log("After delete:", teacher.sessions.length);
+
+    res.status(200).json({
+      message: "Session deleted successfully",
+      sessions: teacher.sessions,
+    });
+
+  } catch (error) {
+    console.log("Delete error:", error);
+
+    res.status(500).json({
+      message: "Internal server error",
+      error: error.message,
+    });
+  }
+};
+
+
 
 //attend session
 async function AttendSession(req, res) {
@@ -179,6 +255,7 @@ const SessionController = {
   GetAllTeacherSessions,
   GetQR,
   AttendSession,
+  deleteSession,
   GetStudentSessions,
 };
 

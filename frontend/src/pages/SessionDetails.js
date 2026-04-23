@@ -3,107 +3,155 @@ import axios from "axios";
 import QRCode from "qrcode.react";
 import "../styles/SessionDetails.css";
 
-const SessionDetails = (props) => {
+const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
   const [qr, setQR] = useState("");
+
+  const session = currentSession[0];
 
   useEffect(() => {
     const getQR = async () => {
       try {
         const response = await axios.post("/sessions/getQR", {
-          session_id: props.currentSession[0].session_id,
+          session_id: session.session_id,
           token: localStorage.getItem("token"),
         });
+
         setQR(response.data.url);
       } catch (error) {
         console.error("QR Fetch Error:", error);
       }
     };
 
-    getQR();
-  }, [props.currentSession]);
+    if (session) {
+      getQR();
+    }
+  }, [session]);
 
   const showImage = (e) => {
     const image = e.target.src;
-    const imageWindow = window.open("", "_blank");
-    imageWindow.document.write(`<img src="${image}" alt="student" width="50%" />`);
+    window.open(image, "_blank");
   };
 
   const copyQR = () => {
     navigator.clipboard.writeText(qr);
+    alert("QR link copied!");
   };
 
-  const getDistance = (distance, radius) => ({
-    distance,
-    color: distance <= parseFloat(radius) ? "green" : "red",
-  });
+  const getDistanceColor = (distance, radius) => {
+    return distance <= parseFloat(radius)
+      ? "green"
+      : "red";
+  };
 
   return (
-    <div className="popup">
-      <button onClick={props.toggleSessionDetails}>
-        <strong>X</strong>
-      </button>
-      <div className="popup-inner">
-        <div className="popup-content">
-          <div className="session-details">
-            <p><strong>Session Name</strong>: {props.currentSession[0].name}</p>
-            <p><strong>Session Date</strong>: {props.currentSession[0].date.split("T")[0]}</p>
-            <p><strong>Session Time</strong>: {props.currentSession[0].time}</p>
-            <p><strong>Session Duration</strong>: {props.currentSession[0].duration}</p>
-            <p><strong>Session Location</strong>: {props.currentSession[0].location}</p>
-            <p><strong>Session Radius</strong>: {props.currentSession[0].radius} meters</p>
+    <div className="session-popup">
+      <div className="session-modal">
+        
+        {/* Close button */}
+        <button
+          className="close-btn"
+          onClick={toggleSessionDetails}
+        >
+          ✖
+        </button>
+
+        {/* Top Section */}
+        <div className="session-top">
+          
+          {/* Session Info */}
+          <div className="session-info-card">
+            <h2>Session Details</h2>
+
+            <p><strong>Name:</strong> {session.name}</p>
+            <p>
+              <strong>Date:</strong>{" "}
+              {session.date.split("T")[0]}
+            </p>
+            <p><strong>Time:</strong> {session.time}</p>
+            <p>
+              <strong>Duration:</strong>{" "}
+              {session.duration}
+            </p>
+            <p>
+              <strong>Radius:</strong>{" "}
+              {session.radius} meters
+            </p>
           </div>
 
-          <div className="qr-code">
-            <QRCode value={qr} onClick={copyQR} size={200} />
-            <button onClick={copyQR} className="copybtn">Copy</button>
+          {/* QR Code */}
+          <div className="qr-card">
+            <h2>Attendance QR</h2>
+            <QRCode value={qr} size={180} />
+            <button
+              className="copy-btn"
+              onClick={copyQR}
+            >
+              Copy QR Link
+            </button>
           </div>
         </div>
 
-        <div className="student-list scrollable-content">
-          <p>Students Attended:</p>
-          <table>
-            <thead>
-              <tr>
-                <th>Reg No</th>
-                <th>IP</th>
-                <th>Date</th>
-                <th>Email</th>
-                <th>Distance</th>
-                <th>Image</th>
-              </tr>
-            </thead>
-            <tbody>
-              {props.currentSession[0].attendance.map((student, index) => {
-                const { distance, color } = getDistance(
-                  student.distance,
-                  props.currentSession[0].radius
-                );
+        {/* Attendance Table */}
+        <div className="attendance-section">
+          <h2>Students Attended</h2>
 
-                return (
-                  <tr key={index}>
-                    <td>{student.regno}</td>
-                    <td>{student.IP}</td>
-                    <td>{student.date.split("T")[0]}</td>
-                    <td>{student.student_email}</td>
-                    <td style={{ color }}>{distance}</td>
-                    <td>
-                      {student.image ? (
-                        <img
-                          src={student.image}
-                          alt="student"
-                          className="student-image"
-                          width={100}
-                          onClick={showImage}
-                        />
-                      ) : (
-                        "No Image"
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          {session.attendance.length > 0 ? (
+            <table className="attendance-table">
+              <thead>
+                <tr>
+                  <th>Reg No</th>
+                  <th>Email</th>
+                  <th>IP</th>
+                  <th>Date</th>
+                  <th>Distance</th>
+                  <th>Image</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {session.attendance.map(
+                  (student, index) => (
+                    <tr key={index}>
+                      <td>{student.regno}</td>
+                      <td>
+                        {student.student_email}
+                      </td>
+                      <td>{student.IP}</td>
+                      <td>
+                        {student.date.split("T")[0]}
+                      </td>
+                      <td
+                        style={{
+                          color:
+                            getDistanceColor(
+                              student.distance,
+                              session.radius
+                            ),
+                        }}
+                      >
+                        {student.distance}
+                      </td>
+
+                      <td>
+                        {student.image ? (
+                          <img
+                            src={student.image}
+                            alt="student"
+                            className="student-image"
+                            onClick={showImage}
+                          />
+                        ) : (
+                          "No Image"
+                        )}
+                      </td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          ) : (
+            <p>No students attended yet.</p>
+          )}
         </div>
       </div>
     </div>

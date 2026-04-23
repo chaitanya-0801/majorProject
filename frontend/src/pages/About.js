@@ -22,12 +22,12 @@ const assets = [
   { image_url: newSession, title: "Create New Session", caption: "Teacher can create a new session..." },
   { image_url: qr, title: "QR Code Generated", caption: "For each session created..." },
   { image_url: teacherd2, title: "Teacher Dashboard View after creating a session", caption: "New Session is Created" },
-  // { image_url: studentd, title: "Student Dashboard View", caption: "After a student logs in..." },
-  // { image_url: submitAttendance, title: "Submit Attendance", caption: "Students can submit their attendance..." },
-  // { image_url: attendance, title: "Attendance Given", caption: "Attendance is successfully submitted" },
-  // { image_url: studentd2, title: "Student Dashboard View after submitting attendance", caption: "Attendance is successfully submitted" },
-  // { image_url: sessionInfo, title: "Session Info in Teacher Dashboard", caption: "Upon clicking on a past session..." },
-  // { image_url: forgorPW, title: "Forgot Password", caption: "Users can reset their passwords..." },
+  { image_url: studentd, title: "Student Dashboard View", caption: "After a student logs in..." },
+  { image_url: submitAttendance, title: "Submit Attendance", caption: "Students can submit their attendance..." },
+  { image_url: attendance, title: "Attendance Given", caption: "Attendance is successfully submitted" },
+  { image_url: studentd2, title: "Student Dashboard View after submitting attendance", caption: "Attendance is successfully submitted" },
+  { image_url: sessionInfo, title: "Session Info in Teacher Dashboard", caption: "Upon clicking on a past session..." },
+  { image_url: forgorPW, title: "Forgot Password", caption: "Users can reset their passwords..." },
 ];
 
 const About = ({ toggleDone }) => {
