@@ -15,7 +15,10 @@ const MONGODB_URL = process.env.DB_URI;
 const CLIENT_URL='http://localhost:3000'
 // Middleware
 app.use(cors({
-  origin: true,
+  origin: [
+    'http://localhost:3000',
+    'https://attend-ease-dev.vercel.app',
+  ],
   credentials: true
 }));
 app.use(cookieParser());

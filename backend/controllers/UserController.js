@@ -42,8 +42,8 @@ const token = jwt.sign(
     res
       .cookie("token", token, {
         httpOnly: true,
-        secure: false, // important for localhost
-        sameSite: "Lax",
+        secure: true, // important for localhost
+        sameSite: "none",
       })
       .status(200)
       .json({

@@ -6,7 +6,9 @@ import { Student } from "../model/Student.js";
 import uploadImage from "../middleware/cloudinary.js";
 import jwt from 'jsonwebtoken'
 
+
 function getQR(session_id, email) {
+  
   let url = `${process.env.CLIENT_URL}/login?${querystring.stringify({
     session_id,
     email,
