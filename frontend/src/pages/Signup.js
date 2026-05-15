@@ -51,21 +51,38 @@ const Signup = () => {
   };
 
   // Step 1 → Send OTP
-  const sendOTP = async () => {
-    if (!formData.name || !formData.email) {
-      return alert("Please fill all fields");
-    }
-const email = formData.email.toLowerCase();
+ // Step 1 → Send OTP
+const sendOTP = async () => {
+  if (!formData.name || !formData.email) {
+    return alert("Please fill all fields");
+  }
 
-if (
-  !email.endsWith("@jmit.ac.in") &&
-  !email.endsWith("@gmail.com")
-) {
-  return alert(
-    "Only @jmit.ac.in & @gmail.com email addresses are allowed"
-  );
-}
-    }
+  const email = formData.email.toLowerCase();
+
+  if (
+    !email.endsWith("@jmit.ac.in") &&
+    !email.endsWith("@gmail.com")
+  ) {
+    return alert(
+      "Only @jmit.ac.in & @gmail.com email addresses are allowed"
+    );
+  }
+
+  try {
+    const res = await axios.post(
+      `${BASE_URL}/users/sendmail`,
+      {
+        email: formData.email,
+      }
+    );
+
+    setSavedOTP(res.data?.otp || 0);
+    setStep(2);
+  } catch (err) {
+    console.error(err);
+    alert("Failed to send OTP");
+  }
+};
 
     try {
       const res = await axios.post(
