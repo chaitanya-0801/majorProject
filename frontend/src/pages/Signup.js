@@ -8,7 +8,7 @@ import see from "../assets/see.png";
 import hide from "../assets/hide.png";
 
 const Signup = () => {
-  const BASE_URL = "http://localhost:5050";
+  const BASE_URL = process.env.REACT_APP_API_URL|| "http://localhost:5050/";
 
   const [step, setStep] = useState(1);
 

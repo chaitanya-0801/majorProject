@@ -19,6 +19,7 @@ const ForgotPassword = () => {
     return SHA256(input).toString();
   }
 
+   const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
   const toggleTwo = async (e) => {
     e.preventDefault();
     const email = document.querySelector("input[name=email]").value;
@@ -30,7 +31,7 @@ const ForgotPassword = () => {
       document.querySelector(".page1").style.display = "none";
       document.querySelector(".page2").style.display = "block";
       await axios
-        .post("http://localhost:5050/users/sendmail", {
+        .post(`${BASE_URL}/users/sendmail`, {
           email: email,
         })
         .then((res) => {
@@ -75,7 +76,7 @@ const ForgotPassword = () => {
         };
         try {
           await axios.post(
-            "http://localhost:5050/users/forgotpassword",
+            `${BASE_URL}/users/forgotpassword`,
             formData
           );
           navigate("/login");

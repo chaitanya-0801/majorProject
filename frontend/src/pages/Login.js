@@ -10,7 +10,7 @@ import hide from "../assets/hide.png";
 
 const queryParameters = new URLSearchParams(window.location.search);
 axios.defaults.withCredentials = true;
-const BASE_URL = "http://localhost:5050";
+const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -19,42 +19,41 @@ const Login = () => {
 
   // const computeHash = (input) => SHA256(input).toString();
 
- const handleLoginSubmit = async (e) => {
-  e.preventDefault();
+  const handleLoginSubmit = async (e) => {
+    e.preventDefault();
 
-  const email = e.target.email.value.trim();
-  const password = e.target.password.value.trim();
+    const email = e.target.email.value.trim();
+    const password = e.target.password.value.trim();
 
-  if (!email || !password) {
-    alert("Please fill all the fields");
-    return;
-  }
-
-  try {
-    const { data } = await axios.post(`${BASE_URL}/users/signin`, {
-      email,
-      password,
-    });
-console.log(data)
-    const { user, type, token: authToken } = data;
-
-    localStorage.setItem("email", user.email);
-    localStorage.setItem("name", user.name);
-    localStorage.setItem("type", type);
-    localStorage.setItem("token", authToken);
-
-    setToken(authToken);
-
-    if (type === "student") {
-      navigate("/student-dashboard");
-    } else {
-      navigate("/teacher-dashboard");
+    if (!email || !password) {
+      alert("Please fill all the fields");
+      return;
     }
 
-  } catch (err) {
-    alert(err.response?.data?.message || "Login failed");
-  }
-};
+    try {
+      const { data } = await axios.post(`${BASE_URL}/users/signin`, {
+        email,
+        password,
+      });
+      console.log(data);
+      const { user, type, token: authToken } = data;
+
+      localStorage.setItem("email", user.email);
+      localStorage.setItem("name", user.name);
+      localStorage.setItem("type", type);
+      localStorage.setItem("token", authToken);
+
+      setToken(authToken);
+
+      if (type === "student") {
+        navigate("/student-dashboard");
+      } else {
+        navigate("/teacher-dashboard");
+      }
+    } catch (err) {
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
 
   useEffect(() => {
     const session_id = queryParameters.get("session_id") || "";
@@ -66,8 +65,8 @@ console.log(data)
         type === "teacher"
           ? "/teacher-dashboard"
           : session_id && teacher
-          ? `/student-dashboard?session_id=${session_id}&email=${teacher}`
-          : "/student-dashboard";
+            ? `/student-dashboard?session_id=${session_id}&email=${teacher}`
+            : "/student-dashboard";
       navigate(path);
     }
   }, [token, navigate]);
@@ -99,7 +98,10 @@ console.log(data)
                   onClick={() => setShowPassword(!showPassword)}
                   style={{ padding: 0 }}
                 >
-                  <img src={showPassword ? hide : see} alt="toggle visibility" />
+                  <img
+                    src={showPassword ? hide : see}
+                    alt="toggle visibility"
+                  />
                 </button>
               </div>
 
