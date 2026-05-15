@@ -56,7 +56,7 @@ const Signup = () => {
       return alert("Please fill all fields");
     }
 
-    if (!formData.email.endsWith("@jmit.ac.in"||"@gmail.com")) {
+    if (!formData.email.endsWith("@jmit.ac.in") && !formData.email.endsWith("@gmail.com")) {
       return alert(
         "Only @jmit.ac.in & @gmail.com email addresses are allowed"
       );
