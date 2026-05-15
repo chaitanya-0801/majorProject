@@ -46,7 +46,7 @@ const TeacherDashboard = () => {
         err
       );
     }
-  }, [token]);
+  }, [token,BASE_URL]);
 
   // Show session details popup
   const toggleSessionDetails = useCallback(
@@ -103,7 +103,7 @@ const TeacherDashboard = () => {
         alert("Failed to delete session");
       }
     },
-    [token]
+    [token,BASE_URL]
   );
 
   useEffect(() => {

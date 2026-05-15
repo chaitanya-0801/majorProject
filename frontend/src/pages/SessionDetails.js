@@ -26,7 +26,7 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
     if (session) {
       getQR();
     }
-  }, [session]);
+  }, [session,BASE_URL]);
 
   const showImage = (e) => {
     const image = e.target.src;

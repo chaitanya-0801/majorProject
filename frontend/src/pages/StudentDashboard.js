@@ -24,7 +24,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching sessions:", error);
       });
-  }, [token]);
+  }, [token,BASE_URL]);
 
   const toggleStudentForm = useCallback(
     (action) => {
