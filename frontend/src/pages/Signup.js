@@ -55,11 +55,16 @@ const Signup = () => {
     if (!formData.name || !formData.email) {
       return alert("Please fill all fields");
     }
+const email = formData.email.toLowerCase();
 
-    if (!formData.email.endsWith("@jmit.ac.in") && !formData.email.endsWith("@gmail.com")&& !formData.email.endsWith("@Gmail.com")) {
-      return alert(
-        "Only @jmit.ac.in & @gmail.com email addresses are allowed"
-      );
+if (
+  !email.endsWith("@jmit.ac.in") &&
+  !email.endsWith("@gmail.com")
+) {
+  return alert(
+    "Only @jmit.ac.in & @gmail.com email addresses are allowed"
+  );
+}
     }
 
     try {
