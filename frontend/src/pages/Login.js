@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { SHA256 } from "crypto-js";
+// import { SHA256 } from "crypto-js";
 import axios from "axios";
 import "../styles/Login.css";
 import image from "../assets/image.png";
@@ -17,7 +17,7 @@ const Login = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-  const computeHash = (input) => SHA256(input).toString();
+  // const computeHash = (input) => SHA256(input).toString();
 
  const handleLoginSubmit = async (e) => {
   e.preventDefault();

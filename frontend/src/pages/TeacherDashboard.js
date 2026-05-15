@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import axios from "axios";
 import "../styles/Dashboard.css";
 import { useNavigate } from "react-router-dom";
@@ -8,67 +12,98 @@ import SessionDetails from "./SessionDetails";
 axios.defaults.withCredentials = true;
 
 const TeacherDashboard = () => {
-  const [token] = useState(localStorage.getItem("token") || "");
+  const [token] = useState(
+    localStorage.getItem("token") || ""
+  );
+
   const [sessionList, setSessionList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isSessionDisplay, setSessionDisplay] = useState(false);
-  const [currentSession, setCurrentSession] = useState([]);
+  const [isSessionDisplay, setSessionDisplay] =
+    useState(false);
+
+  const [currentSession, setCurrentSession] =
+    useState([]);
+
   const navigate = useNavigate();
 
   // Fetch all sessions
-  const updateList = async () => {
+  const updateList = useCallback(async () => {
     try {
-      const response = await axios.post("/sessions/getSessions", {
-        token,
-      });
-
-      setSessionList(response.data.sessions || []);
-    } catch (err) {
-      console.error("Error fetching sessions:", err);
-    }
-  };
-
-  // Show session details popup
-  const toggleSessionDetails = (session_id) => {
-    const session = sessionList.filter(
-      (session) => session.session_id === session_id
-    );
-
-    setCurrentSession(session);
-    setSessionDisplay((prev) => !prev);
-  };
-
-  // Open create session popup
-  const togglePopup = () => {
-    setIsOpen((prev) => !prev);
-  };
-
-  // Delete session
-  const deleteSession = async (sessionId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this session?"
-    );
-
-    if (!confirmDelete) return;
-
-    try {
-      await axios.post("/sessions/deleteSession", {
-        token,
-        session_id: sessionId,
-      });
-
-      setSessionList((prev) =>
-        prev.filter(
-          (session) => session.session_id !== sessionId
-        )
+      const response = await axios.post(
+        "/sessions/getSessions",
+        {
+          token,
+        }
       );
 
-      alert("Session deleted successfully");
-    } catch (error) {
-      console.error("Error deleting session:", error);
-      alert("Failed to delete session");
+      setSessionList(
+        response.data.sessions || []
+      );
+    } catch (err) {
+      console.error(
+        "Error fetching sessions:",
+        err
+      );
     }
-  };
+  }, [token]);
+
+  // Show session details popup
+  const toggleSessionDetails = useCallback(
+    (session_id) => {
+      const session = sessionList.filter(
+        (session) =>
+          session.session_id === session_id
+      );
+
+      setCurrentSession(session);
+
+      setSessionDisplay((prev) => !prev);
+    },
+    [sessionList]
+  );
+
+  // Open create session popup
+  const togglePopup = useCallback(() => {
+    setIsOpen((prev) => !prev);
+  }, []);
+
+  // Delete session
+  const deleteSession = useCallback(
+    async (sessionId) => {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this session?"
+      );
+
+      if (!confirmDelete) return;
+
+      try {
+        await axios.post(
+          "/sessions/deleteSession",
+          {
+            token,
+            session_id: sessionId,
+          }
+        );
+
+        setSessionList((prev) =>
+          prev.filter(
+            (session) =>
+              session.session_id !== sessionId
+          )
+        );
+
+        alert("Session deleted successfully");
+      } catch (error) {
+        console.error(
+          "Error deleting session:",
+          error
+        );
+
+        alert("Failed to delete session");
+      }
+    },
+    [token]
+  );
 
   useEffect(() => {
     if (!token) {
@@ -76,10 +111,14 @@ const TeacherDashboard = () => {
     } else {
       updateList();
 
-      const logoutBtn = document.querySelector(".logout");
-      if (logoutBtn) logoutBtn.style.display = "block";
+      const logoutBtn =
+        document.querySelector(".logout");
+
+      if (logoutBtn) {
+        logoutBtn.style.display = "block";
+      }
     }
-  }, [navigate, token]);
+  }, [navigate, token, updateList]);
 
   return (
     <div className="dashboard-main">
@@ -116,7 +155,9 @@ const TeacherDashboard = () => {
               {sessionList.map((session) => (
                 <tr key={session.session_id}>
                   <td>{session.name}</td>
+
                   <td>{session.duration}</td>
+
                   <td>{session.time}</td>
 
                   <td className="action-buttons">

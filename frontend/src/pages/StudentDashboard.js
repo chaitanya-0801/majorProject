@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import "../styles/StudentDashboard.css";
 import { useNavigate } from "react-router-dom";
@@ -10,9 +10,10 @@ const Dashboard = () => {
   const [token] = useState(localStorage.getItem("token") || "");
   const [sessionList, setSessionList] = useState([]);
   const [isSessionDisplay, setSessionDisplay] = useState(false);
+
   const navigate = useNavigate();
 
-  const getStudentSessions = () => {
+  const getStudentSessions = useCallback(() => {
     axios
       .post("/sessions/getStudentSessions", { token })
       .then((response) => {
@@ -22,21 +23,25 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching sessions:", error);
       });
-  };
+  }, [token]);
 
-  const toggleStudentForm = (action) => {
-    if (action === "open") {
-      setSessionDisplay(true);
-    } else {
-      localStorage.removeItem("session_id");
-      localStorage.removeItem("teacher_email");
-      setSessionDisplay(false);
-      navigate("/student-dashboard");
-    }
-  };
+  const toggleStudentForm = useCallback(
+    (action) => {
+      if (action === "open") {
+        setSessionDisplay(true);
+      } else {
+        localStorage.removeItem("session_id");
+        localStorage.removeItem("teacher_email");
+        setSessionDisplay(false);
+        navigate("/student-dashboard");
+      }
+    },
+    [navigate]
+  );
 
   const getDistance = (distance, radius) => {
     const isWithinRadius = distance <= parseFloat(radius);
+
     return {
       distance,
       color: isWithinRadius ? "green" : "red",
@@ -52,7 +57,10 @@ const Dashboard = () => {
     getStudentSessions();
 
     const logoutBtn = document.querySelector(".logout");
-    if (logoutBtn) logoutBtn.style.display = "block";
+
+    if (logoutBtn) {
+      logoutBtn.style.display = "block";
+    }
 
     const sessionId = queryParameters.get("session_id");
     const email = queryParameters.get("email");
@@ -70,13 +78,14 @@ const Dashboard = () => {
     } else {
       toggleStudentForm("open");
     }
-  }, [token]);
+  }, [token, getStudentSessions, navigate, toggleStudentForm]);
 
   return (
     <div className="dashboard-main">
       {!isSessionDisplay ? (
         <div className="session-list">
           <h2>Your Sessions</h2>
+
           <table>
             <thead>
               <tr>
@@ -88,6 +97,7 @@ const Dashboard = () => {
                 <th>Image</th>
               </tr>
             </thead>
+
             <tbody>
               {sessionList.length > 0 ? (
                 sessionList.map((session, index) => {
@@ -95,18 +105,28 @@ const Dashboard = () => {
                     session.distance,
                     session.radius
                   );
+
                   return (
                     <tr key={index} className="session">
                       <td>{session?.name || "N/A"}</td>
+
                       {/* <td>{session?.date?.split("T")[0] || "N/A"}</td> */}
+
                       <td>{session?.time || "N/A"}</td>
+
                       <td>{session?.duration || "N/A"}</td>
+
                       <td className="distance" style={{ color }}>
                         {distance}
                       </td>
+
                       <td>
                         {session.image ? (
-                          <img src={session.image} alt="session" width={200} />
+                          <img
+                            src={session.image}
+                            alt="session"
+                            width={200}
+                          />
                         ) : (
                           "No image"
                         )}
