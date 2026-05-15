@@ -35,6 +35,9 @@ mongoose
   .catch((err) => console.log(err));
 
 // Routes
+app.get("/", (req, res) => {
+  res.send("Hello World this is the backend of Attend Ease");
+})
 app.use("/users", userRoutes);
 app.use("/sessions", SessionRoutes);
 
