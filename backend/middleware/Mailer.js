@@ -7,7 +7,9 @@ export default class Mailer {
   static async sendMail(to, subject, text) {
     try {
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 587,
+        secure: false,
         auth: {
           user: process.env.EMAIL,
           pass: process.env.PASSWORD,
@@ -15,7 +17,10 @@ export default class Mailer {
       });
 
       const mailOptions = {
-        from: `"AttendEase" <${process.env.EMAIL}>`,
+        from: {
+          name: "AttendEase",
+          address: process.env.EMAIL,
+        },
         to,
         subject,
         text,
@@ -23,11 +28,11 @@ export default class Mailer {
 
       const info = await transporter.sendMail(mailOptions);
 
-      console.log("Mail Sent:", info.response);
+      console.log(info);
 
       return info;
     } catch (error) {
-      console.log("Mail Error:", error);
+      console.log(error);
       return false;
     }
   }
