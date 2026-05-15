@@ -18,6 +18,7 @@ const NewSession = ({ togglePopup }) => {
   };
 
   const createQR = async (e) => {
+    const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
     e.preventDefault();
     const name = e.target.name.value.trim();
     const time = e.target.time.value.trim();
@@ -49,7 +50,7 @@ const NewSession = ({ togglePopup }) => {
           };
 
           try {
-            const res = await axios.post("/sessions/create", formData);
+            const res = await axios.post(`${BASE_URL}/sessions/create`, formData);
             console.log(res)
             setQrData(res.data.url);
             setQrtoggle(true);

@@ -26,11 +26,12 @@ const TeacherDashboard = () => {
 
   const navigate = useNavigate();
 
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
   // Fetch all sessions
   const updateList = useCallback(async () => {
     try {
       const response = await axios.post(
-        "/sessions/getSessions",
+        `${BASE_URL}/sessions/getSessions`,
         {
           token,
         }
@@ -78,7 +79,7 @@ const TeacherDashboard = () => {
 
       try {
         await axios.post(
-          "/sessions/deleteSession",
+          `${BASE_URL}/sessions/deleteSession`,
           {
             token,
             session_id: sessionId,

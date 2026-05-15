@@ -7,11 +7,12 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
   const [qr, setQR] = useState("");
 
   const session = currentSession[0];
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
 
   useEffect(() => {
     const getQR = async () => {
       try {
-        const response = await axios.post("/sessions/getQR", {
+        const response = await axios.post(`${BASE_URL}/sessions/getQR`, {
           session_id: session.session_id,
           token: localStorage.getItem("token"),
         });

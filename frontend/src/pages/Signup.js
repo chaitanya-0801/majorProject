@@ -56,9 +56,9 @@ const Signup = () => {
       return alert("Please fill all fields");
     }
 
-    if (!formData.email.endsWith("@jmit.ac.in")) {
+    if (!formData.email.endsWith("@jmit.ac.in"||"@gmail.com")) {
       return alert(
-        "Only @jmit.ac.in email addresses are allowed"
+        "Only @jmit.ac.in & @gmail.com email addresses are allowed"
       );
     }
 
@@ -132,7 +132,7 @@ const Signup = () => {
 
     try {
       await axios.post(
-        "/users/signup",
+        `${BASE_URL}/users/signup`,
         payload
       );
 
@@ -234,7 +234,7 @@ const Signup = () => {
                     Only
                     <strong>
                       {" "}
-                      @jmit.ac.in
+                      @jmit.ac.in & @gmail.com
                     </strong>{" "}
                     emails allowed
                   </p>

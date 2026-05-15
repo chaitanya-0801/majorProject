@@ -8,6 +8,7 @@ const StudentForm = ({ togglePopup }) => {
   const [photoData, setPhotoData] = useState("");
   const [message, setMessage] = useState("");
   const videoRef = useRef(null);
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
 
   const startCamera = () => {
     navigator.mediaDevices
@@ -87,7 +88,7 @@ const StudentForm = ({ togglePopup }) => {
           formData.append("image", imageBlob, "photo.png");
 
           const response = await axios.post(
-            "/sessions/attend_session",
+            `${BASE_URL}/sessions/attend_session`,
             formData,
             {
               headers: { "Content-Type": "multipart/form-data" },

@@ -13,9 +13,10 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
   const getStudentSessions = useCallback(() => {
     axios
-      .post("/sessions/getStudentSessions", { token })
+      .post(`${BASE_URL}/sessions/getStudentSessions`, { token })
       .then((response) => {
         console.log("Fetched sessions:", response.data.sessions);
         setSessionList(response.data.sessions || []);
