@@ -241,7 +241,7 @@ if (
                       {" "}
                       @jmit.ac.in & @gmail.com
                     </strong>{" "}
-                    emails allowed
+                    emails are allowed
                   </p>
 
                   <button
