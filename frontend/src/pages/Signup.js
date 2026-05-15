@@ -8,7 +8,8 @@ import see from "../assets/see.png";
 import hide from "../assets/hide.png";
 
 const Signup = () => {
-  const BASE_URL = process.env.REACT_APP_API_URL|| "http://localhost:5050/";
+  const BASE_URL =
+    process.env.REACT_APP_API_URL || "http://localhost:5050";
 
   const [step, setStep] = useState(1);
 
@@ -28,7 +29,10 @@ const Signup = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [savedOTP, setSavedOTP] = useState(0);
 
-  const [token] = useState(localStorage.getItem("token") || "");
+  const [token] = useState(
+    localStorage.getItem("token") || ""
+  );
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,38 +55,21 @@ const Signup = () => {
   };
 
   // Step 1 → Send OTP
- // Step 1 → Send OTP
-const sendOTP = async () => {
-  if (!formData.name || !formData.email) {
-    return alert("Please fill all fields");
-  }
+  const sendOTP = async () => {
+    if (!formData.name || !formData.email) {
+      return alert("Please fill all fields");
+    }
 
-  const email = formData.email.toLowerCase();
+    const email = formData.email.toLowerCase();
 
-  if (
-    !email.endsWith("@jmit.ac.in") &&
-    !email.endsWith("@gmail.com")
-  ) {
-    return alert(
-      "Only @jmit.ac.in & @gmail.com email addresses are allowed"
-    );
-  }
-
-  try {
-    const res = await axios.post(
-      `${BASE_URL}/users/sendmail`,
-      {
-        email: formData.email,
-      }
-    );
-
-    setSavedOTP(res.data?.otp || 0);
-    setStep(2);
-  } catch (err) {
-    console.error(err);
-    alert("Failed to send OTP");
-  }
-};
+    if (
+      !email.endsWith("@jmit.ac.in") &&
+      !email.endsWith("@gmail.com")
+    ) {
+      return alert(
+        "Only @jmit.ac.in & @gmail.com email addresses are allowed"
+      );
+    }
 
     try {
       const res = await axios.post(
@@ -107,7 +94,8 @@ const sendOTP = async () => {
     }
 
     if (
-      parseInt(formData.otp) === parseInt(savedOTP)
+      parseInt(formData.otp) ===
+      parseInt(savedOTP)
     ) {
       setStep(3);
     } else {
@@ -176,13 +164,9 @@ const sendOTP = async () => {
       {/* Right form section */}
       <div className="register-right">
         <div className="register-right-container">
-          
           {/* Logo */}
           <div className="register-logo">
-            <img
-              src={image192}
-              alt="logo"
-            />
+            <img src={image192} alt="logo" />
           </div>
 
           <div className="register-center">
@@ -191,24 +175,18 @@ const sendOTP = async () => {
 
             {/* Step Indicator */}
             <div className="step-indicator">
-              {[1, 2, 3, 4, 5].map(
-                (num) => (
-                  <div
-                    key={num}
-                    className={`step-circle ${
-                      step >= num
-                        ? "active"
-                        : ""
-                    }`}
-                  />
-                )
-              )}
+              {[1, 2, 3, 4, 5].map((num) => (
+                <div
+                  key={num}
+                  className={`step-circle ${
+                    step >= num ? "active" : ""
+                  }`}
+                />
+              ))}
             </div>
 
             <form
-              onSubmit={
-                handleRegisterSubmit
-              }
+              onSubmit={handleRegisterSubmit}
             >
               {/* STEP 1 */}
               {step === 1 && (
@@ -216,13 +194,12 @@ const sendOTP = async () => {
                   <select
                     name="type"
                     value={formData.type}
-                    onChange={
-                      handleChange
-                    }
+                    onChange={handleChange}
                   >
                     <option value="student">
                       Student
                     </option>
+
                     <option value="teacher">
                       Teacher
                     </option>
@@ -232,31 +209,24 @@ const sendOTP = async () => {
                     type="text"
                     name="name"
                     placeholder="Full Name"
-                    value={
-                      formData.name
-                    }
-                    onChange={
-                      handleChange
-                    }
+                    value={formData.name}
+                    onChange={handleChange}
                   />
 
                   <input
                     type="email"
                     name="email"
                     placeholder="College Email"
-                    value={
-                      formData.email
-                    }
-                    onChange={
-                      handleChange
-                    }
+                    value={formData.email}
+                    onChange={handleChange}
                   />
 
                   <p className="email-note">
                     Only
                     <strong>
                       {" "}
-                      @jmit.ac.in & @gmail.com
+                      @jmit.ac.in &
+                      @gmail.com
                     </strong>{" "}
                     emails are allowed
                   </p>
@@ -277,12 +247,8 @@ const sendOTP = async () => {
                     type="text"
                     name="otp"
                     placeholder="Enter OTP"
-                    value={
-                      formData.otp
-                    }
-                    onChange={
-                      handleChange
-                    }
+                    value={formData.otp}
+                    onChange={handleChange}
                   />
 
                   <button
@@ -310,23 +276,15 @@ const sendOTP = async () => {
                     type="text"
                     name="pno"
                     placeholder="Phone Number"
-                    value={
-                      formData.pno
-                    }
-                    onChange={
-                      handleChange
-                    }
+                    value={formData.pno}
+                    onChange={handleChange}
                   />
 
                   <input
                     type="date"
                     name="dob"
-                    value={
-                      formData.dob
-                    }
-                    onChange={
-                      handleChange
-                    }
+                    value={formData.dob}
+                    onChange={handleChange}
                   />
 
                   <button
@@ -373,9 +331,7 @@ const sendOTP = async () => {
                     value={
                       formData.identityNumber
                     }
-                    onChange={
-                      handleChange
-                    }
+                    onChange={handleChange}
                   />
 
                   <p className="identity-note">
@@ -428,12 +384,8 @@ const sendOTP = async () => {
                       }
                       name="password"
                       placeholder="Password"
-                      value={
-                        formData.password
-                      }
-                      onChange={
-                        handleChange
-                      }
+                      value={formData.password}
+                      onChange={handleChange}
                     />
 
                     <span
@@ -467,9 +419,7 @@ const sendOTP = async () => {
                       value={
                         formData.confirmPassword
                       }
-                      onChange={
-                        handleChange
-                      }
+                      onChange={handleChange}
                     />
 
                     <span
