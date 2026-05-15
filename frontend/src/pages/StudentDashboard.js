@@ -1,10 +1,9 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-
-axios.defaults.withCredentials = true;
 import "../styles/StudentDashboard.css";
 import { useNavigate } from "react-router-dom";
 import StudentForm from "./StudentForm";
+axios.defaults.withCredentials = true;
 
 const queryParameters = new URLSearchParams(window.location.search);
 
