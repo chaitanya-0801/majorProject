@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+
 import QRCode from "qrcode.react";
 import "../styles/SessionDetails.css";
+axios.defaults.withCredentials = true;
 
 const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
   const [qr, setQR] = useState("");
 
   const session = currentSession[0];
-  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
 
   useEffect(() => {
     const getQR = async () => {
@@ -26,7 +28,7 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
     if (session) {
       getQR();
     }
-  }, [session,BASE_URL]);
+  }, [session, BASE_URL]);
 
   const showImage = (e) => {
     const image = e.target.src;
@@ -39,43 +41,37 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
   };
 
   const getDistanceColor = (distance, radius) => {
-    return distance <= parseFloat(radius)
-      ? "green"
-      : "red";
+    return distance <= parseFloat(radius) ? "green" : "red";
   };
 
   return (
     <div className="session-popup">
       <div className="session-modal">
-        
         {/* Close button */}
-        <button
-          className="close-btn"
-          onClick={toggleSessionDetails}
-        >
+        <button className="close-btn" onClick={toggleSessionDetails}>
           ✖
         </button>
 
         {/* Top Section */}
         <div className="session-top">
-          
           {/* Session Info */}
           <div className="session-info-card">
             <h2>Session Details</h2>
 
-            <p><strong>Name:</strong> {session.name}</p>
             <p>
-              <strong>Date:</strong>{" "}
-              {session.date.split("T")[0]}
-            </p>
-            <p><strong>Time:</strong> {session.time}</p>
-            <p>
-              <strong>Duration:</strong>{" "}
-              {session.duration}
+              <strong>Name:</strong> {session.name}
             </p>
             <p>
-              <strong>Radius:</strong>{" "}
-              {session.radius} meters
+              <strong>Date:</strong> {session.date.split("T")[0]}
+            </p>
+            <p>
+              <strong>Time:</strong> {session.time}
+            </p>
+            <p>
+              <strong>Duration:</strong> {session.duration}
+            </p>
+            <p>
+              <strong>Radius:</strong> {session.radius} meters
             </p>
           </div>
 
@@ -83,10 +79,7 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
           <div className="qr-card">
             <h2>Attendance QR</h2>
             <QRCode value={qr} size={180} />
-            <button
-              className="copy-btn"
-              onClick={copyQR}
-            >
+            <button className="copy-btn" onClick={copyQR}>
               Copy QR Link
             </button>
           </div>
@@ -110,44 +103,37 @@ const SessionDetails = ({ currentSession, toggleSessionDetails }) => {
               </thead>
 
               <tbody>
-                {session.attendance.map(
-                  (student, index) => (
-                    <tr key={index}>
-                      <td>{student.regno}</td>
-                      <td>
-                        {student.student_email}
-                      </td>
-                      <td>{student.IP}</td>
-                      <td>
-                        {student.date.split("T")[0]}
-                      </td>
-                      <td
-                        style={{
-                          color:
-                            getDistanceColor(
-                              student.distance,
-                              session.radius
-                            ),
-                        }}
-                      >
-                        {student.distance}
-                      </td>
+                {session.attendance.map((student, index) => (
+                  <tr key={index}>
+                    <td>{student.regno}</td>
+                    <td>{student.student_email}</td>
+                    <td>{student.IP}</td>
+                    <td>{student.date.split("T")[0]}</td>
+                    <td
+                      style={{
+                        color: getDistanceColor(
+                          student.distance,
+                          session.radius,
+                        ),
+                      }}
+                    >
+                      {student.distance}
+                    </td>
 
-                      <td>
-                        {student.image ? (
-                          <img
-                            src={student.image}
-                            alt="student"
-                            className="student-image"
-                            onClick={showImage}
-                          />
-                        ) : (
-                          "No Image"
-                        )}
-                      </td>
-                    </tr>
-                  )
-                )}
+                    <td>
+                      {student.image ? (
+                        <img
+                          src={student.image}
+                          alt="student"
+                          className="student-image"
+                          onClick={showImage}
+                        />
+                      ) : (
+                        "No Image"
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           ) : (

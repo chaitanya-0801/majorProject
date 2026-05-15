@@ -4,6 +4,7 @@ import axios from "axios";
 import image512 from "../assets/logo512.png";
 import image192 from "../assets/logo192.png";
 import { SHA256 } from "crypto-js";
+axios.defaults.withCredentials = true;
 
 const ForgotPassword = () => {
   // eslint-disable-next-line
@@ -11,7 +12,7 @@ const ForgotPassword = () => {
   // eslint-disable-next-line
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [SaveOTP, setOtp] = useState(
-    Math.floor(100000 + Math.random() * 900000) || 0
+    Math.floor(100000 + Math.random() * 900000) || 0,
   );
   const navigate = useNavigate();
 
@@ -19,7 +20,7 @@ const ForgotPassword = () => {
     return SHA256(input).toString();
   }
 
-   const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
   const toggleTwo = async (e) => {
     e.preventDefault();
     const email = document.querySelector("input[name=email]").value;
@@ -75,10 +76,7 @@ const ForgotPassword = () => {
           password,
         };
         try {
-          await axios.post(
-            `${BASE_URL}/users/forgotpassword`,
-            formData
-          );
+          await axios.post(`${BASE_URL}/users/forgotpassword`, formData);
           navigate("/login");
         } catch (err) {
           console.log(err);

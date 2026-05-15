@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+
+axios.defaults.withCredentials = true;
 import "../styles/StudentDashboard.css";
 import { useNavigate } from "react-router-dom";
 import StudentForm from "./StudentForm";
@@ -13,7 +15,7 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
   const getStudentSessions = useCallback(() => {
     axios
       .post(`${BASE_URL}/sessions/getStudentSessions`, { token })
@@ -24,7 +26,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.error("Error fetching sessions:", error);
       });
-  }, [token,BASE_URL]);
+  }, [token, BASE_URL]);
 
   const toggleStudentForm = useCallback(
     (action) => {
@@ -37,7 +39,7 @@ const Dashboard = () => {
         navigate("/student-dashboard");
       }
     },
-    [navigate]
+    [navigate],
   );
 
   const getDistance = (distance, radius) => {
@@ -104,7 +106,7 @@ const Dashboard = () => {
                 sessionList.map((session, index) => {
                   const { distance, color } = getDistance(
                     session.distance,
-                    session.radius
+                    session.radius,
                   );
 
                   return (
@@ -123,11 +125,7 @@ const Dashboard = () => {
 
                       <td>
                         {session.image ? (
-                          <img
-                            src={session.image}
-                            alt="session"
-                            width={200}
-                          />
+                          <img src={session.image} alt="session" width={200} />
                         ) : (
                           "No image"
                         )}

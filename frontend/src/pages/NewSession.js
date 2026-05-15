@@ -4,6 +4,8 @@ import axios from "axios";
 import QRCode from "qrcode.react";
 import "../styles/NewSession.css";
 
+axios.defaults.withCredentials = true;
+
 const NewSession = ({ togglePopup }) => {
   const [token] = useState(localStorage.getItem("token") || "");
   const [qrtoggle, setQrtoggle] = useState(false);
@@ -18,7 +20,7 @@ const NewSession = ({ togglePopup }) => {
   };
 
   const createQR = async (e) => {
-    const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+    const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
     e.preventDefault();
     const name = e.target.name.value.trim();
     const time = e.target.time.value.trim();
@@ -50,8 +52,11 @@ const NewSession = ({ togglePopup }) => {
           };
 
           try {
-            const res = await axios.post(`${BASE_URL}/sessions/create`, formData);
-            console.log(res)
+            const res = await axios.post(
+              `${BASE_URL}/sessions/create`,
+              formData,
+            );
+            console.log(res);
             setQrData(res.data.url);
             setQrtoggle(true);
           } catch (err) {
@@ -63,7 +68,7 @@ const NewSession = ({ togglePopup }) => {
           console.error("Error getting geolocation:", error);
           alert("Failed to get location.");
         },
-        { enableHighAccuracy: true, timeout: 10000 }
+        { enableHighAccuracy: true, timeout: 10000 },
       );
     } else {
       alert("Geolocation is not supported by this browser.");
@@ -87,9 +92,24 @@ const NewSession = ({ togglePopup }) => {
         <div className="popup-inner">
           <h5>Create a New Session</h5>
           <form onSubmit={createQR}>
-            <input type="text" name="name" placeholder="Session Name" autoComplete="off" />
-            <input type="text" name="duration" placeholder="Duration (e.g. 30 mins)" autoComplete="off" />
-            <input type="text" name="time" placeholder="Time (e.g. 10:00 AM)" autoComplete="off" />
+            <input
+              type="text"
+              name="name"
+              placeholder="Session Name"
+              autoComplete="off"
+            />
+            <input
+              type="text"
+              name="duration"
+              placeholder="Duration (e.g. 30 mins)"
+              autoComplete="off"
+            />
+            <input
+              type="text"
+              name="time"
+              placeholder="Time (e.g. 10:00 AM)"
+              autoComplete="off"
+            />
             <select name="radius" id="radius">
               <option value="50">50 meters</option>
               <option value="75">75 meters</option>

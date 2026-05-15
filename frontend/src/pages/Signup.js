@@ -2,14 +2,15 @@ import React, { useEffect, useState } from "react";
 import "../styles/Signup.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
 import image from "../assets/image.png";
 import image192 from "../assets/logo192.png";
 import see from "../assets/see.png";
 import hide from "../assets/hide.png";
+axios.defaults.withCredentials = true;
 
 const Signup = () => {
-  const BASE_URL =
-    process.env.REACT_APP_API_URL || "http://localhost:5050";
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
 
   const [step, setStep] = useState(1);
 
@@ -29,9 +30,7 @@ const Signup = () => {
   const [showPassword2, setShowPassword2] = useState(false);
   const [savedOTP, setSavedOTP] = useState(0);
 
-  const [token] = useState(
-    localStorage.getItem("token") || ""
-  );
+  const [token] = useState(localStorage.getItem("token") || "");
 
   const navigate = useNavigate();
 
@@ -62,22 +61,14 @@ const Signup = () => {
 
     const email = formData.email.toLowerCase();
 
-    if (
-      !email.endsWith("@jmit.ac.in") &&
-      !email.endsWith("@gmail.com")
-    ) {
-      return alert(
-        "Only @jmit.ac.in & @gmail.com email addresses are allowed"
-      );
+    if (!email.endsWith("@jmit.ac.in") && !email.endsWith("@gmail.com")) {
+      return alert("Only @jmit.ac.in & @gmail.com email addresses are allowed");
     }
 
     try {
-      const res = await axios.post(
-        `${BASE_URL}/users/sendmail`,
-        {
-          email: formData.email,
-        }
-      );
+      const res = await axios.post(`${BASE_URL}/users/sendmail`, {
+        email: formData.email,
+      });
 
       setSavedOTP(res.data?.otp || 0);
       setStep(2);
@@ -93,10 +84,7 @@ const Signup = () => {
       return alert("Please enter OTP");
     }
 
-    if (
-      parseInt(formData.otp) ===
-      parseInt(savedOTP)
-    ) {
+    if (parseInt(formData.otp) === parseInt(savedOTP)) {
       setStep(3);
     } else {
       alert("Invalid OTP");
@@ -118,11 +106,7 @@ const Signup = () => {
       identityNumber,
     } = formData;
 
-    if (
-      !password ||
-      !confirmPassword ||
-      !identityNumber
-    ) {
+    if (!password || !confirmPassword || !identityNumber) {
       return alert("Please fill all fields");
     }
 
@@ -141,10 +125,7 @@ const Signup = () => {
     };
 
     try {
-      await axios.post(
-        `${BASE_URL}/users/signup`,
-        payload
-      );
+      await axios.post(`${BASE_URL}/users/signup`, payload);
 
       alert("Signup successful!");
       navigate("/login");
@@ -178,16 +159,12 @@ const Signup = () => {
               {[1, 2, 3, 4, 5].map((num) => (
                 <div
                   key={num}
-                  className={`step-circle ${
-                    step >= num ? "active" : ""
-                  }`}
+                  className={`step-circle ${step >= num ? "active" : ""}`}
                 />
               ))}
             </div>
 
-            <form
-              onSubmit={handleRegisterSubmit}
-            >
+            <form onSubmit={handleRegisterSubmit}>
               {/* STEP 1 */}
               {step === 1 && (
                 <div className="first-slide">
@@ -196,13 +173,9 @@ const Signup = () => {
                     value={formData.type}
                     onChange={handleChange}
                   >
-                    <option value="student">
-                      Student
-                    </option>
+                    <option value="student">Student</option>
 
-                    <option value="teacher">
-                      Teacher
-                    </option>
+                    <option value="teacher">Teacher</option>
                   </select>
 
                   <input
@@ -223,18 +196,11 @@ const Signup = () => {
 
                   <p className="email-note">
                     Only
-                    <strong>
-                      {" "}
-                      @jmit.ac.in &
-                      @gmail.com
-                    </strong>{" "}
-                    emails are allowed
+                    <strong> @jmit.ac.in & @gmail.com</strong> emails are
+                    allowed
                   </p>
 
-                  <button
-                    type="button"
-                    onClick={sendOTP}
-                  >
+                  <button type="button" onClick={sendOTP}>
                     Next
                   </button>
                 </div>
@@ -251,19 +217,11 @@ const Signup = () => {
                     onChange={handleChange}
                   />
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      goToStep(1)
-                    }
-                  >
+                  <button type="button" onClick={() => goToStep(1)}>
                     Edit Email
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={verifyOTP}
-                  >
+                  <button type="button" onClick={verifyOTP}>
                     Verify OTP
                   </button>
                 </div>
@@ -287,25 +245,15 @@ const Signup = () => {
                     onChange={handleChange}
                   />
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      goToStep(2)
-                    }
-                  >
+                  <button type="button" onClick={() => goToStep(2)}>
                     Back
                   </button>
 
                   <button
                     type="button"
                     onClick={() => {
-                      if (
-                        !formData.pno ||
-                        !formData.dob
-                      ) {
-                        return alert(
-                          "Please fill all fields"
-                        );
+                      if (!formData.pno || !formData.dob) {
+                        return alert("Please fill all fields");
                       }
 
                       setStep(4);
@@ -323,44 +271,32 @@ const Signup = () => {
                     type="text"
                     name="identityNumber"
                     placeholder={
-                      formData.type ===
-                      "student"
+                      formData.type === "student"
                         ? "Enter Roll Number"
                         : "Enter Teacher ID"
                     }
-                    value={
-                      formData.identityNumber
-                    }
+                    value={formData.identityNumber}
                     onChange={handleChange}
                   />
 
                   <p className="identity-note">
-                    {formData.type ===
-                    "student"
+                    {formData.type === "student"
                       ? "Enter your official roll number"
                       : "Enter your teacher employee ID"}
                   </p>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      goToStep(3)
-                    }
-                  >
+                  <button type="button" onClick={() => goToStep(3)}>
                     Back
                   </button>
 
                   <button
                     type="button"
                     onClick={() => {
-                      if (
-                        !formData.identityNumber
-                      ) {
+                      if (!formData.identityNumber) {
                         return alert(
-                          formData.type ===
-                            "student"
+                          formData.type === "student"
                             ? "Please enter Roll Number"
-                            : "Please enter Teacher ID"
+                            : "Please enter Teacher ID",
                         );
                       }
 
@@ -377,11 +313,7 @@ const Signup = () => {
                 <div className="fifth-slide">
                   <div className="pass-input-div">
                     <input
-                      type={
-                        showPassword1
-                          ? "text"
-                          : "password"
-                      }
+                      type={showPassword1 ? "text" : "password"}
                       name="password"
                       placeholder="Password"
                       value={formData.password}
@@ -390,79 +322,41 @@ const Signup = () => {
 
                     <span
                       className="eye-icon"
-                      onClick={() =>
-                        setShowPassword1(
-                          !showPassword1
-                        )
-                      }
+                      onClick={() => setShowPassword1(!showPassword1)}
                     >
-                      <img
-                        src={
-                          showPassword1
-                            ? hide
-                            : see
-                        }
-                        alt="toggle"
-                      />
+                      <img src={showPassword1 ? hide : see} alt="toggle" />
                     </span>
                   </div>
 
                   <div className="pass-input-div">
                     <input
-                      type={
-                        showPassword2
-                          ? "text"
-                          : "password"
-                      }
+                      type={showPassword2 ? "text" : "password"}
                       name="confirmPassword"
                       placeholder="Confirm Password"
-                      value={
-                        formData.confirmPassword
-                      }
+                      value={formData.confirmPassword}
                       onChange={handleChange}
                     />
 
                     <span
                       className="eye-icon"
-                      onClick={() =>
-                        setShowPassword2(
-                          !showPassword2
-                        )
-                      }
+                      onClick={() => setShowPassword2(!showPassword2)}
                     >
-                      <img
-                        src={
-                          showPassword2
-                            ? hide
-                            : see
-                        }
-                        alt="toggle"
-                      />
+                      <img src={showPassword2 ? hide : see} alt="toggle" />
                     </span>
                   </div>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      goToStep(4)
-                    }
-                  >
+                  <button type="button" onClick={() => goToStep(4)}>
                     Back
                   </button>
 
-                  <button type="submit">
-                    Sign Up
-                  </button>
+                  <button type="submit">Sign Up</button>
                 </div>
               )}
             </form>
           </div>
 
           <p className="login-bottom-p">
-            Already have an account?{" "}
-            <Link to="/login">
-              Login
-            </Link>
+            Already have an account? <Link to="/login">Login</Link>
           </p>
         </div>
       </div>

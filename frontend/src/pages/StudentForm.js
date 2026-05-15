@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+
+axios.defaults.withCredentials = true;
 import "../styles/StudentForm.css";
 
 const StudentForm = ({ togglePopup }) => {
@@ -8,7 +10,7 @@ const StudentForm = ({ togglePopup }) => {
   const [photoData, setPhotoData] = useState("");
   const [message, setMessage] = useState("");
   const videoRef = useRef(null);
-  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
 
   const startCamera = () => {
     navigator.mediaDevices
@@ -80,7 +82,10 @@ const StudentForm = ({ togglePopup }) => {
           formData.append("token", token);
           formData.append("regno", regno);
           formData.append("session_id", localStorage.getItem("session_id"));
-          formData.append("teacher_email", localStorage.getItem("teacher_email"));
+          formData.append(
+            "teacher_email",
+            localStorage.getItem("teacher_email"),
+          );
           formData.append("IP", IP);
           formData.append("date", new Date().toISOString().split("T")[0]);
           formData.append("Location", locationString);
@@ -92,14 +97,14 @@ const StudentForm = ({ togglePopup }) => {
             formData,
             {
               headers: { "Content-Type": "multipart/form-data" },
-            }
+            },
           );
 
           setMessage(response.data.message);
         },
         (error) => {
           console.error("Geolocation error:", error);
-        }
+        },
       );
     } catch (err) {
       console.error("Submission error:", err);

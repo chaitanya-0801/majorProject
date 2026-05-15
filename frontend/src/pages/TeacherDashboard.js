@@ -1,9 +1,6 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-} from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+
 import "../styles/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import NewSession from "./NewSession";
@@ -12,55 +9,42 @@ import SessionDetails from "./SessionDetails";
 axios.defaults.withCredentials = true;
 
 const TeacherDashboard = () => {
-  const [token] = useState(
-    localStorage.getItem("token") || ""
-  );
+  const [token] = useState(localStorage.getItem("token") || "");
 
   const [sessionList, setSessionList] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
-  const [isSessionDisplay, setSessionDisplay] =
-    useState(false);
+  const [isSessionDisplay, setSessionDisplay] = useState(false);
 
-  const [currentSession, setCurrentSession] =
-    useState([]);
+  const [currentSession, setCurrentSession] = useState([]);
 
   const navigate = useNavigate();
 
-  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050"
+  const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
   // Fetch all sessions
   const updateList = useCallback(async () => {
     try {
-      const response = await axios.post(
-        `${BASE_URL}/sessions/getSessions`,
-        {
-          token,
-        }
-      );
+      const response = await axios.post(`${BASE_URL}/sessions/getSessions`, {
+        token,
+      });
 
-      setSessionList(
-        response.data.sessions || []
-      );
+      setSessionList(response.data.sessions || []);
     } catch (err) {
-      console.error(
-        "Error fetching sessions:",
-        err
-      );
+      console.error("Error fetching sessions:", err);
     }
-  }, [token,BASE_URL]);
+  }, [token, BASE_URL]);
 
   // Show session details popup
   const toggleSessionDetails = useCallback(
     (session_id) => {
       const session = sessionList.filter(
-        (session) =>
-          session.session_id === session_id
+        (session) => session.session_id === session_id,
       );
 
       setCurrentSession(session);
 
       setSessionDisplay((prev) => !prev);
     },
-    [sessionList]
+    [sessionList],
   );
 
   // Open create session popup
@@ -72,38 +56,29 @@ const TeacherDashboard = () => {
   const deleteSession = useCallback(
     async (sessionId) => {
       const confirmDelete = window.confirm(
-        "Are you sure you want to delete this session?"
+        "Are you sure you want to delete this session?",
       );
 
       if (!confirmDelete) return;
 
       try {
-        await axios.post(
-          `${BASE_URL}/sessions/deleteSession`,
-          {
-            token,
-            session_id: sessionId,
-          }
-        );
+        await axios.post(`${BASE_URL}/sessions/deleteSession`, {
+          token,
+          session_id: sessionId,
+        });
 
         setSessionList((prev) =>
-          prev.filter(
-            (session) =>
-              session.session_id !== sessionId
-          )
+          prev.filter((session) => session.session_id !== sessionId),
         );
 
         alert("Session deleted successfully");
       } catch (error) {
-        console.error(
-          "Error deleting session:",
-          error
-        );
+        console.error("Error deleting session:", error);
 
         alert("Failed to delete session");
       }
     },
-    [token,BASE_URL]
+    [token, BASE_URL],
   );
 
   useEffect(() => {
@@ -112,8 +87,7 @@ const TeacherDashboard = () => {
     } else {
       updateList();
 
-      const logoutBtn =
-        document.querySelector(".logout");
+      const logoutBtn = document.querySelector(".logout");
 
       if (logoutBtn) {
         logoutBtn.style.display = "block";
@@ -130,10 +104,7 @@ const TeacherDashboard = () => {
         </div>
 
         <div className="createbtncol">
-          <button
-            onClick={togglePopup}
-            className="createbtn"
-          >
+          <button onClick={togglePopup} className="createbtn">
             Create Session
           </button>
         </div>
@@ -164,22 +135,14 @@ const TeacherDashboard = () => {
                   <td className="action-buttons">
                     <button
                       className="detailsbtn"
-                      onClick={() =>
-                        toggleSessionDetails(
-                          session.session_id
-                        )
-                      }
+                      onClick={() => toggleSessionDetails(session.session_id)}
                     >
                       View Details
                     </button>
 
                     <button
                       className="deletebtn"
-                      onClick={() =>
-                        deleteSession(
-                          session.session_id
-                        )
-                      }
+                      onClick={() => deleteSession(session.session_id)}
                     >
                       Delete
                     </button>
@@ -189,9 +152,7 @@ const TeacherDashboard = () => {
             </tbody>
           </table>
         ) : (
-          <p className="no-session">
-            No sessions found
-          </p>
+          <p className="no-session">No sessions found</p>
         )}
       </div>
 
@@ -200,9 +161,7 @@ const TeacherDashboard = () => {
         <div className="popup-overlay">
           <SessionDetails
             currentSession={currentSession}
-            toggleSessionDetails={
-              toggleSessionDetails
-            }
+            toggleSessionDetails={toggleSessionDetails}
           />
         </div>
       )}
