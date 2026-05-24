@@ -1,4 +1,4 @@
-# AttendEase 📍✅
+# AttendEase 📍
 
 AttendEase is a smart attendance management system designed for educational institutions. It allows teachers to create attendance sessions while enabling students to mark their attendance securely using real-time geolocation verification.
 
