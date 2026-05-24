@@ -1,8 +1,8 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
+import "../styles/StudentForm.css";
 
 axios.defaults.withCredentials = true;
-import "../styles/StudentForm.css";
 
 const StudentForm = ({ togglePopup }) => {
   const [token] = useState(localStorage.getItem("token") || "");
