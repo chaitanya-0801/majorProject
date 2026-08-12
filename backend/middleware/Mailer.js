@@ -17,10 +17,7 @@ export default class Mailer {
       });
 
       const mailOptions = {
-        from: {
-          name: "Attendo",
-          // address: process.env.EMAIL,
-        },
+        from: '"Attendo" <no-reply@yourapp.com>',
         to,
         subject,
         text,
