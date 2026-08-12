@@ -4,7 +4,7 @@ dotenv.config();
 import nodemailer from "nodemailer";
 
 export default class Mailer {
-  static async sendMail(to, subject, text) {
+  static async sendMail(email, subject, text) {
     try {
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
