@@ -145,12 +145,14 @@ function SendMail(req, res) {
     },
   });
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "OTP for registration",
-    text: `Your OTP is ${otp}`,
-  };
+const mailOptions = {
+  from: '"Attendo" <no-reply@yourapp.com>',
+  to: email,
+  subject,
+  html: `<b>Your OTP for Registration at Attendo is ${otp}</b>`,
+};
+
+await transporter.sendMail(mailOptions);
 
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
