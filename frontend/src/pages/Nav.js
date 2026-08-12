@@ -44,7 +44,7 @@ const Nav = () => {
               className="logo-img"
             />
             <span className="logo-text">
-              AttendEase
+              Attendo
             </span>
           </a>
         </div>
