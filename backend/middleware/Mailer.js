@@ -16,12 +16,12 @@ export default class Mailer {
         },
       });
 
-      const mailOptions = {
-        from: '"Attendo" <no-reply@yourapp.com>',
-        to,
-        subject,
-        text,
-      };
+      const mailOptions = await transporter.sendMail({
+      from: '"Attendo" <no-reply@yourapp.com>',
+      to: email,
+      subject,
+      html: `<b>${text}</b>`,
+    });
 
       const info = await transporter.sendMail(mailOptions);
 
