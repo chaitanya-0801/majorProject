@@ -18,8 +18,8 @@ export default class Mailer {
 
       const mailOptions = {
         from: {
-          name: "AttendEase",
-          address: process.env.EMAIL,
+          name: "Attendo",
+          // address: process.env.EMAIL,
         },
         to,
         subject,
