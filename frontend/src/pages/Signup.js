@@ -330,8 +330,8 @@ const Signup = () => {
   value={formData.password}
   onChange={handleChange}
   minLength={8}
-  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
-  title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+  // pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+  // title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
   required
 />
 
@@ -346,13 +346,13 @@ const Signup = () => {
                   <div className="pass-input-div">
               <input
   type={showPassword1 ? "text" : "password"}
-  name="password"
-  placeholder="Password"
-  value={formData.password}
+  name="confirmPassword"
+  placeholder="Confirm Password"
+  value={formData.confirmPassword}
   onChange={handleChange}
   minLength={8}
-  pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
-  title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
+  // pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}"
+  // title="Password must be at least 8 characters and include uppercase, lowercase, number, and special character."
   required
 />
 
