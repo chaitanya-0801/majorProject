@@ -31,6 +31,16 @@ const Login = () => {
       alert("Please fill all the fields");
       return;
     }
+      const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+
+  if (!passwordRegex.test(formData.password)) {
+    alert(
+      "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+    );
+    return;
+  }
+
 
     try {
       const { data } = await axios.post(`${BASE_URL}/users/signin`, {
