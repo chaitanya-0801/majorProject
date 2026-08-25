@@ -91,12 +91,7 @@ const StudentForm = ({ togglePopup }) => {
           formData.append("Location", locationString);
           formData.append("student_email", localStorage.getItem("email"));
           formData.append("image", imageBlob, "photo.png");
-          // console.log(formData)
-          console.log("FormData contents:");
 
-          for (const [key, value] of formData.entries()) {
-            console.log(key, value);
-          }
           const response = await axios.post(
             `${BASE_URL}/sessions/attend_session`,
             formData,
@@ -123,7 +118,7 @@ const StudentForm = ({ togglePopup }) => {
       </button>
       <div className="form-popup-inner">
         {message ? (
-          <h5>{message}</h5>
+          <h5 className="form-message">{message}</h5>
         ) : (
           <>
             <h5>Enter Your Details</h5>
