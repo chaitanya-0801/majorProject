@@ -31,15 +31,15 @@ const Login = () => {
       alert("Please fill all the fields");
       return;
     }
-      const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  //     const passwordRegex =
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-  if (!passwordRegex.test(e.target.password.value.password)) {
-    alert(
-      "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-    );
-    return;
-  }
+  // if (!passwordRegex.test(e.target.password.value.password)) {
+  //   alert(
+  //     "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+  //   );
+  //   return;
+  // }
 
 
     try {
