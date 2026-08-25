@@ -114,15 +114,15 @@ const Signup = () => {
       return alert("Passwords do not match");
     }
 
-      const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
+  //     const passwordRegex =
+  //   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 
-  if (!passwordRegex.test(formData.password)) {
-    alert(
-      "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
-    );
-    return;
-  }
+  // if (!passwordRegex.test(formData.password)) {
+  //   alert(
+  //     "Password must be at least 8 characters and contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+  //   );
+  //   return;
+  // }
 
 
     const payload = {
