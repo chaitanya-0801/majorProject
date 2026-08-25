@@ -17,7 +17,7 @@ router.post("/getQR", JWT.verifyToken, SessionController.GetQR);
 //attend session
 router.post(
   "/attend_session",
-  JWT.verifyToken,
+  // JWT.verifyToken,
   upload.single("image"),
   SessionController.AttendSession
 );

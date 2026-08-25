@@ -91,7 +91,12 @@ const StudentForm = ({ togglePopup }) => {
           formData.append("Location", locationString);
           formData.append("student_email", localStorage.getItem("email"));
           formData.append("image", imageBlob, "photo.png");
+          // console.log(formData)
+          console.log("FormData contents:");
 
+          for (const [key, value] of formData.entries()) {
+            console.log(key, value);
+          }
           const response = await axios.post(
             `${BASE_URL}/sessions/attend_session`,
             formData,
@@ -123,9 +128,9 @@ const StudentForm = ({ togglePopup }) => {
           <>
             <h5>Enter Your Details</h5>
             {!photoData ? (
-              <video ref={videoRef} width={300} autoPlay />
+              <video ref={videoRef} width={100} autoPlay />
             ) : (
-              <img src={photoData} width={300} alt="Captured" />
+              <img src={photoData} width={100} alt="Captured" />
             )}
 
             <div className="cam-btn">

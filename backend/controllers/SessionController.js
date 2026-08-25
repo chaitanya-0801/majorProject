@@ -4,11 +4,9 @@ import querystring from "querystring";
 import { Teacher } from "../model/Teacher.js";
 import { Student } from "../model/Student.js";
 import uploadImage from "../middleware/cloudinary.js";
-import jwt from 'jsonwebtoken'
-
+import jwt from "jsonwebtoken";
 
 function getQR(session_id, email) {
-  
   let url = `${process.env.CLIENT_URL}/login?${querystring.stringify({
     session_id,
     email,
@@ -42,7 +40,7 @@ function checkStudentDistance(Location1, Location2) {
     locationLat1,
     locationLon1,
     locationLat2,
-    locationLon2
+    locationLon2,
   );
   return distance.toFixed(2);
 }
@@ -50,7 +48,7 @@ function checkStudentDistance(Location1, Location2) {
 //make controller functions
 
 async function CreateNewSession(req, res) {
-  console.log("Ram Ram")
+  console.log("Ram Ram");
   let { session_id, name, duration, location, radius, date, time, token } =
     req.body;
   let tokenData = req.user;
@@ -64,11 +62,11 @@ async function CreateNewSession(req, res) {
     location,
     radius,
   };
-  
+
   try {
     let teacher = await Teacher.findOneAndUpdate(
       { email: tokenData.email },
-      { $push: { sessions: newSession } }
+      { $push: { sessions: newSession } },
     );
 
     res.status(200).json({
@@ -76,7 +74,7 @@ async function CreateNewSession(req, res) {
       message: "Session created successfully",
     });
   } catch (err) {
-    console.log("kuch ")
+    console.log("kuch ");
     res.status(400).json({ message: "kya hal hao" });
   }
 }
@@ -101,8 +99,7 @@ async function GetQR(req, res) {
   }
 }
 
-
-async function deleteSession (req, res) {
+async function deleteSession(req, res) {
   try {
     const { token, session_id } = req.body;
 
@@ -115,10 +112,7 @@ async function deleteSession (req, res) {
     }
 
     // Verify token
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const email = decoded.email;
 
@@ -137,8 +131,7 @@ async function deleteSession (req, res) {
 
     // Find session first
     const sessionExists = teacher.sessions.find(
-      (session) =>
-        session.session_id === session_id
+      (session) => session.session_id === session_id,
     );
 
     if (!sessionExists) {
@@ -149,8 +142,7 @@ async function deleteSession (req, res) {
 
     // Remove session
     teacher.sessions = teacher.sessions.filter(
-      (session) =>
-        session.session_id !== session_id
+      (session) => session.session_id !== session_id,
     );
 
     await teacher.save();
@@ -161,7 +153,6 @@ async function deleteSession (req, res) {
       message: "Session deleted successfully",
       sessions: teacher.sessions,
     });
-
   } catch (error) {
     console.log("Delete error:", error);
 
@@ -170,72 +161,126 @@ async function deleteSession (req, res) {
       error: error.message,
     });
   }
-};
-
-
+}
 
 //attend session
 async function AttendSession(req, res) {
-  let tokenData = req.user;
-  let { session_id, teacher_email, regno, IP, student_email, Location, date } =
-    req.body;
-  let imageName = req.file.filename;
-
   try {
-    let present = false;
-    const teacher = await Teacher.findOne({ email: teacher_email });
-    let session_details = {};
-    teacher.sessions.map(async (session) => {
-      if (session.session_id === session_id) {
-        let distance = checkStudentDistance(Location, session.location);
-        session.attendance.map((student) => {
-          if (
-            student.regno === regno ||
-            student.student_email === student_email
-          ) {
-            present = true;
-          }
-        });
-        if (!present) {
-          res.status(200).json({ message: "Attendance marked successfully" });
-          await uploadImage(imageName).then((result) => {
-            session_details = {
-              session_id: session.session_id,
-              teacher_email: teacher.email,
-              name: session.name,
-              date: session.date,
-              time: session.time,
-              duration: session.duration,
-              distance: distance,
-              radius: session.radius,
-              image: result,
-            };
-            session.attendance.push({
-              regno,
-              image: result,
-              date,
-              IP,
-              student_email: tokenData.email,
-              Location,
-              distance,
-            });
-          });
-          await Teacher.findOneAndUpdate(
-            { email: teacher_email },
-            { sessions: teacher.sessions }
-          );
-          await Student.findOneAndUpdate(
-            { email: student_email },
-            { $push: { sessions: session_details } }
-          );
-        }
-      }
-    });
-    if (present) {
-      res.status(200).json({ message: "Attendance already marked" });
+    const tokenData = req.user;
+
+    const {
+      session_id,
+      teacher_email,
+      regno,
+      IP,
+      student_email,
+      Location,
+      date,
+    } = req.body;
+    console.log(req.body);
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Image is required",
+      });
     }
+
+    const imageName = req.file.filename;
+
+    const teacher = await Teacher.findOne({ email: teacher_email });
+
+    if (!teacher) {
+      return res.status(404).json({
+        message: "Teacher not found",
+      });
+    }
+
+    const session = teacher.sessions.find(
+      (session) => session.session_id === session_id,
+    );
+
+    if (!session) {
+      return res.status(404).json({
+        message: "Session not found",
+      });
+    }
+
+    // Check if attendance already exists
+    const present = session.attendance.some(
+      (student) =>
+        student.regno === regno || student.student_email === student_email,
+    );
+
+    if (present) {
+      return res.status(200).json({
+        message: "Attendance already marked",
+      });
+    }
+
+    // Calculate distance
+    const distance = checkStudentDistance(Location, session.location);
+
+    // Upload image
+    const result = await uploadImage(imageName);
+
+    // Add attendance to teacher session
+    session.attendance.push({
+      regno,
+      image: result,
+      date,
+      IP,
+      student_email: student_email,
+      Location,
+      distance,
+    });
+
+    // Update teacher document
+    await Teacher.findOneAndUpdate(
+      { email: teacher_email },
+      { sessions: teacher.sessions },
+    );
+
+    // Data to add in Student DB
+    const session_details = {
+      session_id: session.session_id,
+      teacher_email: teacher.email,
+      name: session.name,
+      date: session.date,
+      time: session.time,
+      duration: session.duration,
+      distance,
+      radius: session.radius,
+      image: result,
+    };
+
+    // Add session to Student DB
+    const student = await Student.findOneAndUpdate(
+      { email: student_email },
+      {
+        $push: {
+          sessions: session_details,
+        },
+      },
+      { new: true },
+    );
+
+    if (!student) {
+      return res.status(404).json({
+        message: "Student not found",
+      });
+    }
+
+    console.log("Session added to student:", session_details);
+
+    return res.status(200).json({
+      message: "Attendance marked successfully",
+      session: session_details,
+    });
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error("AttendSession Error:", err);
+
+    return res.status(400).json({
+      message: err.message,
+    });
   }
 }
 

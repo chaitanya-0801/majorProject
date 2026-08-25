@@ -47,12 +47,12 @@ const Login = () => {
         email,
         password,
       });
-      console.log(data);
       const { user, type, token: authToken } = data;
 
       localStorage.setItem("email", user.email);
       localStorage.setItem("name", user.name);
       localStorage.setItem("type", type);
+      console.log(authToken)
       localStorage.setItem("token", authToken);
 
       setToken(authToken);

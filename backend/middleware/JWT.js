@@ -4,14 +4,12 @@ import jwt from "jsonwebtoken";
 
 function verifyToken(req, res, next) {
   // Toverify user Token
-  const token = req.cookies.token;
-  console.log(token)
+  const {token} = req.body
   if (!token) return res.status(401).send("Access Denied");
 
   try {
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
-    console.log(req.user)
     next();
   } catch (err) {
     res.status(400).send("Invalid Token");
