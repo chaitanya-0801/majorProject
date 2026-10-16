@@ -4,16 +4,17 @@ const schema = mongoose.Schema;
 const userSchema = new schema(
   {
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true, unique: true, index: true },
     pno: { type: String, required: true },
     dob: { type: String, required: true },
     password: { type: String, required: true },
-    // Password save as hash
-    identityNumber:{type:Number,required:true},
+    identityNumber: { type: schema.Types.Mixed, required: true },
+    role: { type: String, enum: ["teacher", "admin"], default: "teacher" },
+    department: { type: String, default: "Computer Science" },
     sessions: [
       {
         session_id: { type: String, required: true },
-        date: { type: Date, required: true },
+        date: { type: schema.Types.Mixed, required: true },
         time: { type: String, required: true },
         name: { type: String, required: true },
         duration: { type: String, required: true },
@@ -24,7 +25,7 @@ const userSchema = new schema(
             regno: { type: String, required: true },
             image: { type: String, required: true },
             IP: { type: String, required: true },
-            date: { type: Date, required: true },
+            date: { type: schema.Types.Mixed, required: true },
             student_email: { type: String, required: true },
             Location: { type: String, required: true },
             distance: { type: String, required: true },
@@ -37,3 +38,4 @@ const userSchema = new schema(
 );
 
 export const Teacher = mongoose.model("teacher", userSchema);
+export default Teacher;
