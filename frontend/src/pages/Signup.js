@@ -44,6 +44,7 @@ const Signup = () => {
     setClassCodeStatus("checking");
     try {
       const res = await axios.get(`${BASE_URL}/classes/lookup/${code}`);
+      console.log(res)
       if (res.data?.valid && res.data.class) {
         setClassCodeStatus("valid");
         setVerifiedClass(res.data.class);
