@@ -109,6 +109,7 @@ const NewSession = ({ togglePopup }) => {
     const date = new Date().toISOString().split("T")[0];
 
     const targetClass = classes.find((c) => c.class_id === selectedClassId);
+    console.log(targetClass)
     const targetSubject = subjects.find((s) => s.subject_id === selectedSubjectId);
 
     const payload = {
