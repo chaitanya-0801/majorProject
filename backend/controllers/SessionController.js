@@ -62,6 +62,7 @@ async function CreateNewSession(req, res) {
       subject_id,
       subject_name,
       course_code,
+      class_code
     } = req.body;
     const tokenData = req.user;
 
