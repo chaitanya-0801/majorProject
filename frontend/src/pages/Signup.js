@@ -27,8 +27,8 @@ const Signup = () => {
     pno: "",
     dob: "",
     identityNumber: "",
-    class_code: "4CSEA",
-    class_id: "CLASS-4CSEA",
+    class_code: "",
+    class_id: "",
     password: "",
     confirmPassword: "",
   });
@@ -72,7 +72,7 @@ const Signup = () => {
         if (res.data?.classes && res.data.classes.length > 0) {
           setClassList(res.data.classes);
           // Verify default class code
-          verifyClassCode("4CSEA");
+          // verifyClassCode();
         }
       } catch (err) {
         console.error("[Signup] Could not fetch classes list:", err);
