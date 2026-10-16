@@ -101,7 +101,7 @@ const Signup = () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      await axios.post(`${BASE_URL}/users/sendmail`, {
+      const res= await axios.post(`${BASE_URL}/users/sendmail`, {
         email: formData.email.trim(),
       });
       if (res.data.dev_hint) {
