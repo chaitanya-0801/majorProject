@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "./static/css/main.73d9dacc.css",
+    "main.js": "./static/js/main.8626a528.js",
+    "static/js/453.825386d9.chunk.js": "./static/js/453.825386d9.chunk.js",
+    "static/media/attendo-logo.png": "./static/media/attendo-logo.9fd816253fd03349841c.png",
+    "static/media/logo192.png": "./static/media/logo192.9fd816253fd03349841c.png",
+    "index.html": "./index.html",
+    "main.73d9dacc.css.map": "./static/css/main.73d9dacc.css.map",
+    "main.8626a528.js.map": "./static/js/main.8626a528.js.map",
+    "453.825386d9.chunk.js.map": "./static/js/453.825386d9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.73d9dacc.css",
+    "static/js/main.8626a528.js"
+  ]
+}

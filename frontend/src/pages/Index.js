@@ -7,7 +7,8 @@ export { default as Logout } from "./Logout";
 export { default as Nav } from "./Nav";
 export { default as NewSession } from "./NewSession";
 export { default as StudentDashboard } from "./StudentDashboard";
+export { default as AdminDashboard } from "./AdminDashboard";
 export { default as ForgotPassword } from "./ForgotPassword";
 export { default as SessionDetails } from "./SessionDetails";
 export { default as StudentForm } from "./StudentForm";
-
+export { default as AICurriculumAssistant } from "./AICurriculumAssistant";

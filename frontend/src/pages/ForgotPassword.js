@@ -1,156 +1,218 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import image512 from "../assets/logo512.png";
 import image192 from "../assets/logo192.png";
-import { SHA256 } from "crypto-js";
+import { Mail, Lock, KeyRound, ArrowRight, CheckCircle } from "lucide-react";
+
 axios.defaults.withCredentials = true;
 
 const ForgotPassword = () => {
-  // eslint-disable-next-line
-  const [showPassword, setShowPassword] = useState(false);
-  // eslint-disable-next-line
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [SaveOTP, setOtp] = useState(
-    Math.floor(100000 + Math.random() * 900000) || 0,
-  );
+  const [step, setStep] = useState(1); // 1: Email, 2: OTP & New Password
+  const [email, setEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [devOtpHint, setDevOtpHint] = useState("");
+
   const navigate = useNavigate();
-
-  function computeHash(input) {
-    return SHA256(input).toString();
-  }
-
   const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
-  const toggleTwo = async (e) => {
+
+  // Step 1: Send OTP
+  const handleSendOtp = async (e) => {
     e.preventDefault();
-    const email = document.querySelector("input[name=email]").value;
-    if (email === "") {
-      alert("Please enter your email");
+    if (!email.trim()) {
+      setErrorMessage("Please enter your registered institutional email");
       return;
     }
+
+    setLoading(true);
+    setErrorMessage("");
     try {
-      document.querySelector(".page1").style.display = "none";
-      document.querySelector(".page2").style.display = "block";
-      await axios
-        .post(`${BASE_URL}/users/sendmail`, {
-          email: email,
-        })
-        .then((res) => {
-          setOtp(res.data.otp);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    } catch (error) {
-      alert("Error sending OTP");
+      const res = await axios.post(`${BASE_URL}/users/sendmail`, {
+        email: email.trim(),
+      });
+      if (res.data.dev_hint) {
+        setDevOtpHint(res.data.dev_hint);
+      }
+      setStep(2);
+    } catch (err) {
+      setErrorMessage(err.response?.data?.message || "Failed to send verification code");
+    } finally {
+      setLoading(false);
     }
   };
 
-  const toggleThree = async (e) => {
+  // Step 2: Reset Password
+  const handleResetPassword = async (e) => {
     e.preventDefault();
-    const otp = document.querySelector("input[name=otp]").value;
-    if (otp === "") {
-      alert("Please enter OTP");
+    if (!otp.trim() || !password || !confirmPassword) {
+      setErrorMessage("Please fill all fields");
       return;
     }
-    if (parseInt(otp) === parseInt(SaveOTP)) {
-      document.querySelector(".page2").style.display = "none";
-      document.querySelector(".page3").style.display = "block";
-    } else {
-      alert("Invalid OTP");
+
+    if (password.length < 6) {
+      setErrorMessage("New password must be at least 6 characters");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setErrorMessage("Passwords do not match");
+      return;
+    }
+
+    setLoading(true);
+    setErrorMessage("");
+    try {
+      await axios.post(`${BASE_URL}/users/forgotpassword`, {
+        email: email.trim(),
+        password: password.trim(),
+        otp: otp.trim(),
+      });
+      alert("Password updated successfully! You can now sign in with your new password.");
+      navigate("/login");
+    } catch (err) {
+      setErrorMessage(err.response?.data?.message || "Failed to reset password. Code may have expired.");
+    } finally {
+      setLoading(false);
     }
   };
-
-  const handleRegisterSubmit = async (e) => {
-    e.preventDefault();
-    let password = document.querySelector("input[name=password]").value;
-    const cpassword = document.querySelector("input[name=cpassword]").value;
-    if (password.length > 0 && cpassword.length > 0) {
-      if (password === cpassword) {
-        const email = document.querySelector("input[name=email]").value;
-        password = computeHash(password);
-        password = computeHash(email + password);
-
-        const formData = {
-          email,
-          password,
-        };
-        try {
-          await axios.post(`${BASE_URL}/users/forgotpassword`, formData);
-          navigate("/login");
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        alert("Passwords do not match");
-      }
-    } else {
-      alert("Please fill all the fields");
-    }
-  };
-
-  useEffect(() => {
-    if (token !== "") {
-      navigate("/dashboard");
-    }
-  });
 
   return (
-    <div className="register-main">
-      <div className="register-left">
-        <img alt="Full" src={image512} />
-      </div>
-      <div className="register-right">
-        <div className="register-right-container">
-          <div className="register-logo">
-            <img alt="logo" src={image192} />
+    <div style={{ maxWidth: "440px", margin: "40px auto", padding: "20px" }}>
+      <div className="modern-card" style={{ padding: "36px 30px" }}>
+        <div style={{ textAlign: "center", marginBottom: "24px" }}>
+          <img src={image192} alt="AttendEase" style={{ width: "52px", height: "52px", marginBottom: "12px" }} />
+          <h2 style={{ margin: "0 0 6px 0", fontSize: "22px", color: "var(--text-main)" }}>
+            Reset Password
+          </h2>
+          <p style={{ margin: 0, fontSize: "14px", color: "var(--text-muted)" }}>
+            Recover access to your AttendEase account
+          </p>
+        </div>
+
+        {errorMessage && (
+          <div className="alert-box alert-danger" style={{ marginBottom: "18px" }}>
+            {errorMessage}
           </div>
-          <div className="register-center">
-            <h2>Forgot your Password?</h2>
-            <form onSubmit={handleRegisterSubmit}>
-              <div className="page1">
-                <p>Please enter your Email Id</p>
-                <input type="email" placeholder="Email" required name="email" />
-                <button type="button" onClick={toggleTwo}>
-                  Send OTP
-                </button>
+        )}
+
+        {step === 1 ? (
+          <form onSubmit={handleSendOtp}>
+            <div className="form-group">
+              <label className="form-label">Registered Email</label>
+              <div style={{ position: "relative" }}>
+                <input
+                  type="email"
+                  className="form-input"
+                  placeholder="name@institution.edu"
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setErrorMessage(""); }}
+                  required
+                  style={{ paddingLeft: "36px" }}
+                />
+                <Mail size={16} style={{ position: "absolute", left: "12px", top: "12px", color: "var(--text-muted)" }} />
               </div>
-              <div className="page2" style={{ display: "none" }}>
-                <p>Please enter OTP</p>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              style={{ width: "100%", padding: "11px", marginTop: "10px" }}
+              disabled={loading}
+            >
+              {loading ? "Sending Code..." : "Send Verification Code"} <ArrowRight size={16} />
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleResetPassword}>
+            <div style={{ textAlign: "center", marginBottom: "16px" }}>
+              <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
+                Code sent to <strong>{email}</strong>
+              </p>
+              {devOtpHint && (
+                <div style={{ background: "#eff6ff", padding: "4px 8px", borderRadius: "4px", display: "inline-block", fontSize: "12px", color: "var(--primary-700)", marginTop: "4px" }}>
+                  Dev Hint: {devOtpHint}
+                </div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Verification Code</label>
+              <div style={{ position: "relative" }}>
                 <input
                   type="text"
-                  placeholder="OTP"
-                  name="otp"
-                  required={true}
+                  className="form-input"
+                  placeholder="6-digit code"
+                  value={otp}
+                  onChange={(e) => { setOtp(e.target.value); setErrorMessage(""); }}
+                  required
+                  maxLength={6}
+                  style={{ paddingLeft: "36px", letterSpacing: "2px" }}
                 />
-                <button type="button" onClick={toggleThree}>
-                  Submit
-                </button>
+                <KeyRound size={16} style={{ position: "absolute", left: "12px", top: "12px", color: "var(--text-muted)" }} />
               </div>
-              <div className="page3" style={{ display: "none" }}>
-                <p>Please enter new password</p>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">New Password</label>
+              <div style={{ position: "relative" }}>
                 <input
                   type="password"
-                  placeholder="New Password"
+                  className="form-input"
+                  placeholder="Minimum 6 characters"
+                  value={password}
+                  onChange={(e) => { setPassword(e.target.value); setErrorMessage(""); }}
                   required
-                  name="password"
+                  style={{ paddingLeft: "36px" }}
                 />
+                <Lock size={16} style={{ position: "absolute", left: "12px", top: "12px", color: "var(--text-muted)" }} />
+              </div>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Confirm New Password</label>
+              <div style={{ position: "relative" }}>
                 <input
                   type="password"
-                  placeholder=" Confirm New Password"
+                  className="form-input"
+                  placeholder="Re-enter new password"
+                  value={confirmPassword}
+                  onChange={(e) => { setConfirmPassword(e.target.value); setErrorMessage(""); }}
                   required
-                  name="cpassword"
+                  style={{ paddingLeft: "36px" }}
                 />
-                <button type="submit">Change Password</button>
+                <Lock size={16} style={{ position: "absolute", left: "12px", top: "12px", color: "var(--text-muted)" }} />
               </div>
-            </form>
-          </div>
-          <p className="login-bottom-p">
-            Already have an account?{" "}
-            <Link to="/login" style={{ color: "#76ABAE" }}>
-              Login
-            </Link>
-          </p>
+            </div>
+
+            <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+              <button
+                type="button"
+                className="btn btn-secondary"
+                style={{ flex: 1 }}
+                onClick={() => setStep(1)}
+              >
+                Back
+              </button>
+              <button
+                type="submit"
+                className="btn btn-primary"
+                style={{ flex: 1 }}
+                disabled={loading}
+              >
+                {loading ? "Updating..." : "Reset Password"} <CheckCircle size={16} />
+              </button>
+            </div>
+          </form>
+        )}
+
+        <div style={{ textAlign: "center", marginTop: "24px", fontSize: "13px", color: "var(--text-muted)" }}>
+          Remember your password?{" "}
+          <Link to="/login" style={{ color: "var(--primary-600)", fontWeight: "600", textDecoration: "none" }}>
+            Return to Login
+          </Link>
         </div>
       </div>
     </div>
