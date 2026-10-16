@@ -104,6 +104,7 @@ const Signup = () => {
       const res= await axios.post(`${BASE_URL}/users/sendmail`, {
         email: formData.email.trim(),
       });
+      console.log(res)
       if (res.data.dev_hint) {
         setDevOtpHint(res.data.dev_hint);
       }
