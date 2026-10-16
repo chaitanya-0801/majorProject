@@ -33,63 +33,81 @@ const Signup = () => {
     confirmPassword: "",
   });
 
-  const verifyClassCode = useCallback(async (codeToVerify) => {
-    const code = (codeToVerify !== undefined ? codeToVerify : formData.class_code || "").trim().toUpperCase();
-    if (!code) {
-      setClassCodeStatus("idle");
-      setVerifiedClass(null);
-      setVerifiedSubjects([]);
-      return;
-    }
-    setClassCodeStatus("checking");
-    try {
-      const res = await axios.get(`${BASE_URL}/classes/lookup/${code}`);
-      console.log(res)
-      if (res.data?.valid && res.data.class) {
-        setClassCodeStatus("valid");
-        setVerifiedClass(res.data.class);
-        setVerifiedSubjects(res.data.subjects || []);
-        setFormData((prev) => ({
-          ...prev,
-          class_code: res.data.class.class_code,
-          class_id: res.data.class.class_id,
-        }));
-      } else {
-        setClassCodeStatus("invalid");
-        setVerifiedClass(null);
-        setVerifiedSubjects([]);
-      }
-    } catch (err) {
-      setClassCodeStatus("invalid");
-      setVerifiedClass(null);
-      setVerifiedSubjects([]);
-    }
-  }, [BASE_URL, formData.class_code]);
+ const verifyClassCode = useCallback(async (codeToVerify) => {
+  const code = String(
+    codeToVerify ?? formData.class_code ?? ""
+  ).trim().toUpperCase();
 
-  useEffect(() => {
-    async function loadClasses() {
-      try {
-        const res = await axios.get(`${BASE_URL}/classes`);
-        if (res.data?.classes && res.data.classes.length > 0) {
-          setClassList(res.data.classes);
-          // Verify default class code
-          // verifyClassCode();
-        }
-      } catch (err) {
-        console.error("[Signup] Could not fetch classes list:", err);
-      }
-    }
-    loadClasses();
-  }, [BASE_URL, verifyClassCode]);
+  if (!code) {
+    setClassCodeStatus("idle");
+    setVerifiedClass(null);
+    setVerifiedSubjects([]);
+    return false;
+  }
 
+  setClassCodeStatus("checking");
+  setErrorMessage("");
+
+  try {
+    const res = await axios.get(
+      `${BASE_URL}/classes/lookup/${encodeURIComponent(code)}`
+    );
+
+    console.log("Class lookup response:", res.data);
+
+    const classData = res.data?.class;
+
+    if (res.data?.valid && classData?.class_id) {
+      setClassCodeStatus("valid");
+      setVerifiedClass(classData);
+      setVerifiedSubjects(res.data.subjects || []);
+
+      setFormData((prev) => ({
+        ...prev,
+        class_code: classData.class_code || code,
+        class_id: classData.class_id,
+      }));
+
+      return true;
+    }
+
+    setClassCodeStatus("invalid");
+    setVerifiedClass(null);
+    setVerifiedSubjects([]);
+    return false;
+  } catch (err) {
+    console.error(
+      "Class code verification error:",
+      err.response?.data || err.message
+    );
+
+    setClassCodeStatus("invalid");
+    setVerifiedClass(null);
+    setVerifiedSubjects([]);
+    setErrorMessage(
+      err.response?.data?.message ||
+      "Unable to verify class code. Please check the API."
+    );
+
+    return false;
+  }
+}, [BASE_URL, formData.class_code]);
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrorMessage("");
-    if (name === "class_code") {
-      setClassCodeStatus("idle");
-    }
+if (name === "class_code") {
+  setClassCodeStatus("idle");
+  setVerifiedClass(null);
+  setVerifiedSubjects([]);
+  setFormData((prev) => ({
+    ...prev,
+    class_id: "",
+  }));
+}
   };
+
+  
 
   // Step 1: Send OTP
   const handleSendOtp = async (e) => {
