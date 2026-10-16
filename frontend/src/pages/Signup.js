@@ -297,11 +297,11 @@ const Signup = () => {
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                 We sent a 6-digit code to <strong>{formData.email}</strong>
               </p>
-              {devOtpHint && (
+            {/* {devOtpHint && (
                 <div style={{ background: "#eff6ff", padding: "6px 12px", borderRadius: "6px", display: "inline-block", fontSize: "12px", color: "var(--primary-700)", marginTop: "8px" }}>
                   Dev Hint: {devOtpHint}
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className="form-group">

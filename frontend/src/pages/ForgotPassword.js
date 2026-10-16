@@ -131,11 +131,11 @@ const ForgotPassword = () => {
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                 Code sent to <strong>{email}</strong>
               </p>
-              {devOtpHint && (
+              {/* {devOtpHint && (
                 <div style={{ background: "#eff6ff", padding: "4px 8px", borderRadius: "4px", display: "inline-block", fontSize: "12px", color: "var(--primary-700)", marginTop: "4px" }}>
                   Dev Hint: {devOtpHint}
                 </div>
-              )}
+              )} */}
             </div>
 
             <div className="form-group">
