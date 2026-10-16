@@ -275,14 +275,13 @@ async function SendMail(req, res) {
       </div>
     `;
 
-   const mailRes= await Mailer.sendMail(cleanEmail, "AttendEase Verification Code", html);
+    await Mailer.sendMail(cleanEmail, "AttendEase Verification Code", html);
     console.log(`[Auth] OTP for ${cleanEmail} generated: ${otp}`);
 
     // Clean English response without leaking OTP in JSON
     res.status(200).json({
       message: "Verification code sent successfully to your email address",
       otp:otp.toString(),
-      mailRes
       // Include dev_hint in non-production environments to allow testing without live SMTP
       dev_hint: process.env.NODE_ENV !== "production" ? otp.toString() : undefined,
     });
