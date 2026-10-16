@@ -13,7 +13,7 @@ const Signup = () => {
   const [step, setStep] = useState(1); // 1: Info & OTP, 2: Verify OTP, 3: Password & Finish
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  // const [devOtpHint, setDevOtpHint] = useState("");
+  const [devOtpHint, setDevOtpHint] = useState("");
   const [classList, setClassList] = useState([]);
   const [classCodeStatus, setClassCodeStatus] = useState("idle"); // "idle" | "checking" | "valid" | "invalid"
   const [verifiedClass, setVerifiedClass] = useState(null);
@@ -104,9 +104,9 @@ const Signup = () => {
       await axios.post(`${BASE_URL}/users/sendmail`, {
         email: formData.email.trim(),
       });
-      // if (res.data.dev_hint) {
-      //   setDevOtpHint(res.data.dev_hint);
-      // }
+      if (res.data.dev_hint) {
+        setDevOtpHint(res.data.dev_hint);
+      }
       setStep(2);
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Failed to send verification code. Please verify email format.");
@@ -297,11 +297,11 @@ const Signup = () => {
               <p style={{ margin: 0, fontSize: "13px", color: "var(--text-muted)" }}>
                 We sent a 6-digit code to <strong>{formData.email}</strong>
               </p>
-            {/* {devOtpHint && (
+            {devOtpHint && (
                 <div style={{ background: "#eff6ff", padding: "6px 12px", borderRadius: "6px", display: "inline-block", fontSize: "12px", color: "var(--primary-700)", marginTop: "8px" }}>
                   Dev Hint: {devOtpHint}
                 </div>
-              )} */}
+              )}
             </div>
 
             <div className="form-group">
