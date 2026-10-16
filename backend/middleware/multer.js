@@ -1,33 +1,35 @@
-import multer, { diskStorage } from "multer";
-import fs from "fs";
-import path from "path";
 
-const uploadDir = "./public/uploads";
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
-}
+import multer from "multer";
 
-const storage = diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const ext = path.extname(file.originalname) || ".png";
-    cb(null, `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 1e9)}${ext}`);
-  },
-});
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image/")) {
-    cb(null, true);
-  } else {
-    cb(new Error("Only image files are allowed"), false);
+  const allowedMimeTypes = [
+    "image/jpeg",
+    "image/png",
+    "image/webp",
+    "image/gif",
+    "image/avif",
+  ];
+
+  if (allowedMimeTypes.includes(file.mimetype)) {
+    return cb(null, true);
   }
+
+  const error = new Error(
+    "Only JPEG, PNG, WebP, GIF, and AVIF images are allowed."
+  );
+  error.statusCode = 400;
+
+  return cb(error);
 };
 
 export const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB limit
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB
+    files: 1,
+  },
   fileFilter,
 });
 
