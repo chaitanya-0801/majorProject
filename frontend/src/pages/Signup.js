@@ -13,7 +13,7 @@ const Signup = () => {
   const [step, setStep] = useState(1); // 1: Info & OTP, 2: Verify OTP, 3: Password & Finish
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [devOtpHint, setDevOtpHint] = useState("");
+  // const [devOtpHint, setDevOtpHint] = useState("");
   const [classList, setClassList] = useState([]);
   const [classCodeStatus, setClassCodeStatus] = useState("idle"); // "idle" | "checking" | "valid" | "invalid"
   const [verifiedClass, setVerifiedClass] = useState(null);
@@ -101,12 +101,12 @@ const Signup = () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      const res = await axios.post(`${BASE_URL}/users/sendmail`, {
+      await axios.post(`${BASE_URL}/users/sendmail`, {
         email: formData.email.trim(),
       });
-      if (res.data.dev_hint) {
-        setDevOtpHint(res.data.dev_hint);
-      }
+      // if (res.data.dev_hint) {
+      //   setDevOtpHint(res.data.dev_hint);
+      // }
       setStep(2);
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Failed to send verification code. Please verify email format.");

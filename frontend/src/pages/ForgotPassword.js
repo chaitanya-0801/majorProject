@@ -14,7 +14,7 @@ const ForgotPassword = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [devOtpHint, setDevOtpHint] = useState("");
+  // const [devOtpHint, setDevOtpHint] = useState("");
 
   const navigate = useNavigate();
   const BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:5050";
@@ -30,12 +30,12 @@ const ForgotPassword = () => {
     setLoading(true);
     setErrorMessage("");
     try {
-      const res = await axios.post(`${BASE_URL}/users/sendmail`, {
+       await axios.post(`${BASE_URL}/users/sendmail`, {
         email: email.trim(),
       });
-      if (res.data.dev_hint) {
-        setDevOtpHint(res.data.dev_hint);
-      }
+      // if (res.data.dev_hint) {
+      //   setDevOtpHint(res.data.dev_hint);
+      // }
       setStep(2);
     } catch (err) {
       setErrorMessage(err.response?.data?.message || "Failed to send verification code");
