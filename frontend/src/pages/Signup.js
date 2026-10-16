@@ -92,6 +92,23 @@ const Signup = () => {
     return false;
   }
 }, [BASE_URL, formData.class_code]);
+
+    useEffect(() => {
+    async function loadClasses() {
+      try {
+        const res = await axios.get(`${BASE_URL}/classes`);
+        if (res.data?.classes && res.data.classes.length > 0) {
+          setClassList(res.data.classes);
+          // Verify default class code
+          // verifyClassCode();
+        }
+      } catch (err) {
+        console.error("[Signup] Could not fetch classes list:", err);
+      }
+    }
+    loadClasses();
+  }, [BASE_URL, verifyClassCode]);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
