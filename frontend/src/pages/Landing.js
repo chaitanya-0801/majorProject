@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logo from "../assets/attendo-logo.png";
+// import logo from "../assets/attendo-logo.png";
 import { MapPin, Sparkles, Clock, Camera, ArrowRight } from "lucide-react";
 
 const Landing = () => {
@@ -24,11 +24,11 @@ const Landing = () => {
     <div style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 20px" }}>
       {/* Hero Section */}
       <div style={{ textAlign: "center", marginBottom: "60px" }}>
-        <img
+        {/* <img
           src={logo}
           alt="AttendEase Logo"
           style={{ width: "90px", height: "auto", marginBottom: "16px" }}
-        />
+        /> */}
         <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "var(--primary-50)", color: "var(--primary-700)", padding: "6px 14px", borderRadius: "9999px", fontSize: "13px", fontWeight: "600", marginBottom: "16px" }}>
           <Sparkles size={16} /> Next-Generation Institutional Attendance & Learning Platform
         </div>
